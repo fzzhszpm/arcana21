@@ -1,0 +1,3012 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ARCANA 21 · 甜美的骨头</title>
+<style>
+:root{--bg:#0a0b0f;--panel:#14181f;--line:#262b36;--gold:#c9a227;--text:#e8e3d6;--dim:#8d94a3;--win:#5fbf7f;--lose:#d1524a;--purple:#c4a6f0;--card-w:74px;--card-h:108px;--card-gap:9px;--card-corner:14px;--card-big:32px;--page-pad:24px;--table-pad:20px;--table-gap:22px;}
+*{box-sizing:border-box;}
+html,body{-webkit-tap-highlight-color:transparent;}
+body{margin:0;min-height:100vh;padding:var(--page-pad);background:radial-gradient(circle at 50% -10%, #1b1f2b, var(--bg) 65%);color:var(--text);font-family:"Noto Serif SC","Songti SC",Georgia,"Microsoft YaHei",serif;display:flex;justify-content:center;align-items:flex-start;overflow-x:hidden;}
+@supports (min-height:100dvh){body{min-height:100dvh;}}
+.screen{width:100%;display:flex;justify-content:center;}
+.game{width:min(780px,100%);}
+.title-screen{min-height:calc(100vh - 48px);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:clamp(16px,5vh,48px) 0;}
+@supports (min-height:100dvh){.title-screen{min-height:calc(100dvh - 48px);}}
+.logo{margin:0;font-size:clamp(32px,7vw,52px);font-weight:400;letter-spacing:clamp(6px,2.2vw,16px);color:var(--gold);text-shadow:0 0 40px rgba(201,162,39,.35);}
+.logo-sub{margin:14px 0 0;font-size:clamp(11px,3.2vw,14px);letter-spacing:clamp(4px,2vw,8px);color:var(--dim);}
+.logo-desc{margin:clamp(16px,3.5vw,24px) 0 clamp(24px,5vw,34px);font-size:clamp(12px,3.4vw,14px);line-height:2.1;color:#7d8494;letter-spacing:1px;max-width:480px;padding:0 4px;}
+.title-buttons{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%;max-width:560px;}
+.btn{flex:1;min-width:110px;padding:13px 16px;cursor:pointer;background:#1b202a;color:var(--text);border:1px solid var(--line);border-radius:9px;font-family:inherit;font-size:15px;letter-spacing:2px;transition:.15s;touch-action:manipulation;}
+.btn:hover:not(:disabled){background:#232a36;border-color:var(--gold);color:var(--gold);}
+.btn:active:not(:disabled){transform:translateY(1px);}
+.btn:disabled{opacity:.28;cursor:not-allowed;}
+.btn.primary{background:linear-gradient(180deg,#2a2416,#1c1810);border-color:var(--gold);color:var(--gold);box-shadow:0 0 24px rgba(201,162,39,.12);}
+.btn.primary:hover{background:linear-gradient(180deg,#3a311c,#241e12);}
+.title-buttons .btn{min-width:140px;flex:0 0 auto;}
+.title-links{margin-top:clamp(18px,4vw,26px);display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;letter-spacing:2px;}
+.link-btn{background:none;border:none;cursor:pointer;color:#6d7482;font-family:inherit;font-size:13px;letter-spacing:2px;padding:4px 8px;transition:.15s;}
+.link-btn:hover{color:var(--gold);}
+.link-sep{color:#3a4150;font-size:12px;user-select:none;}
+.title-footer{margin-top:clamp(22px,4.5vw,36px);font-size:12px;letter-spacing:1.5px;color:#5d6472;line-height:1.8;padding:0 4px;}
+.hud{display:flex;gap:12px;margin-bottom:12px;}
+.hud-item{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--dim);gap:6px;}
+.hud-item span{white-space:nowrap;}
+.hud-item b{color:var(--gold);font-size:18px;font-weight:600;letter-spacing:.5px;}
+.topbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;min-height:28px;}
+.talent-bar{display:flex;gap:8px;flex-wrap:wrap;flex:1;min-width:0;align-items:center;}
+.talent-chip{font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid var(--gold);color:var(--gold);letter-spacing:1px;background:rgba(201,162,39,.08);cursor:help;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
+.talent-chip.ancient{border-color:#8a5ac9;color:var(--purple);background:rgba(138,90,201,.14);}
+.boss-badge{font-size:12px;padding:4px 12px;border-radius:20px;border:1px solid var(--lose);color:#e8958e;letter-spacing:1.5px;background:rgba(209,82,74,.12);white-space:nowrap;animation:bossPulse 2s infinite;}
+@keyframes bossPulse{0%,100%{box-shadow:0 0 0 rgba(209,82,74,0);}50%{box-shadow:0 0 12px rgba(209,82,74,.35);}}
+.boss-badge.daymare{border-color:#8a5ac9;color:var(--purple);background:rgba(138,90,201,.14);animation:daymarePulse 2.6s infinite;}
+@keyframes daymarePulse{0%,100%{box-shadow:0 0 0 rgba(138,90,201,0);}50%{box-shadow:0 0 14px rgba(138,90,201,.4);}}
+.boss-badge.azita{border-color:#9acd32;color:#c8e85a;background:rgba(26,58,92,.22);animation:azitaPulse 2.4s infinite;}
+@keyframes azitaPulse{0%,100%{box-shadow:0 0 0 rgba(154,205,50,0);}50%{box-shadow:0 0 14px rgba(154,205,50,.5);}}
+.boss-badge.ehsan{border-color:#fa8072;color:#ff9d8a;background:rgba(26,58,92,.22);animation:ehsanPulse 2.8s infinite;}
+@keyframes ehsanPulse{0%,100%{box-shadow:0 0 0 rgba(250,128,114,0);}50%{box-shadow:0 0 14px rgba(250,128,114,.5);}}
+.topbar-actions{display:flex;gap:8px;flex:0 0 auto;flex-wrap:wrap;}
+.mini-btn{padding:6px 14px;font-size:12px;letter-spacing:2px;cursor:pointer;background:#1b202a;color:var(--dim);border:1px solid var(--line);border-radius:20px;font-family:inherit;transition:.15s;white-space:nowrap;}
+.mini-btn:hover{color:var(--gold);border-color:var(--gold);}
+.mini-btn.danger:hover{color:var(--lose);border-color:var(--lose);}
+.table{background:linear-gradient(180deg,#14181f,#0f1218);border:1px solid var(--line);border-radius:14px;padding:var(--table-pad);display:flex;flex-direction:column;gap:var(--table-gap);transition:box-shadow .4s,border-color .4s;position:relative;overflow:hidden;}
+.table.boss-exile{border-color:#6a1a1a;box-shadow:inset 0 0 60px rgba(138,26,26,.12),0 0 24px rgba(209,82,74,.12);}
+.table.boss-daymare{border-color:#4a2e78;box-shadow:inset 0 0 60px rgba(74,46,120,.12),0 0 24px rgba(138,90,201,.12);}
+.table.boss-azita{border-color:#9acd32;box-shadow:inset 0 0 70px rgba(26,58,92,.22),0 0 28px rgba(154,205,50,.18);}
+.table.boss-ehsan{border-color:#fa8072;box-shadow:inset 0 0 70px rgba(26,58,92,.22),0 0 28px rgba(250,128,114,.18);}
+.side-head{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:var(--dim);margin-bottom:10px;letter-spacing:2px;gap:8px;}
+.side-head span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.side-head b{color:var(--gold);font-size:16px;letter-spacing:0;white-space:nowrap;transition:transform .2s,color .2s;}
+.side-head b.bust{color:var(--lose);}
+.side-head b.score-pop{animation:scorePop .55s cubic-bezier(.2,.9,.25,1);}
+@keyframes scorePop{0%{transform:scale(1);}30%{transform:scale(1.45);color:#e8cf6b;text-shadow:0 0 12px rgba(232,207,107,.85);}60%{transform:scale(1.1);}100%{transform:scale(1);}}
+.cards{display:flex;gap:var(--card-gap);flex-wrap:wrap;min-height:calc(var(--card-h) + 2px);}
+.card{width:var(--card-w);height:var(--card-h);border-radius:9px;position:relative;background:linear-gradient(160deg,#fdfbf4,#e7dfcb);color:#1a1a1a;padding:6px;flex:0 0 auto;box-shadow:0 6px 16px rgba(0,0,0,.55);animation:dealIn .26s ease-out;display:flex;flex-direction:column;justify-content:space-between;user-select:none;-webkit-user-select:none;}
+@keyframes dealIn{from{opacity:0;transform:translateY(-18px) rotate(-3deg) scale(.92);}to{opacity:1;transform:none;}}
+.card .corner{font-size:var(--card-corner);font-weight:700;line-height:1.05;letter-spacing:.5px;}
+.card .corner.bottom{align-self:flex-end;transform:rotate(180deg);}
+.card .big{position:absolute;inset:0;display:grid;place-items:center;font-size:var(--card-big);opacity:.9;pointer-events:none;}
+.card.red{color:#b3242a;}
+.card.back{background:repeating-linear-gradient(45deg,#1d2b4a,#1d2b4a 6px,#16223b 6px,#16223b 12px);border:1px solid #2d4066;}
+.card.mech{box-shadow:0 0 0 2px var(--gold),0 6px 16px rgba(0,0,0,.55);}
+.card.modified{box-shadow:0 0 0 2px var(--purple),0 6px 16px rgba(0,0,0,.55);}
+.card.prescription{box-shadow:0 0 0 2px #fa8072,0 0 20px rgba(250,128,114,.5),0 6px 16px rgba(0,0,0,.55);animation:prescriptionPulse 1.6s ease-in-out infinite;}
+@keyframes prescriptionPulse{0%,100%{box-shadow:0 0 0 2px #fa8072,0 0 20px rgba(250,128,114,.5),0 6px 16px rgba(0,0,0,.55);}50%{box-shadow:0 0 0 2px #fa8072,0 0 30px rgba(250,128,114,.8),0 6px 16px rgba(0,0,0,.55);}}
+.message{margin-top:16px;min-height:24px;text-align:center;font-size:15px;color:var(--dim);letter-spacing:1px;transition:color .2s;padding:0 4px;}
+.message.win{color:var(--win);}.message.lose{color:var(--lose);}.message.push{color:var(--gold);}
+.notes{margin-top:6px;text-align:center;font-size:13px;line-height:1.8;color:#b8a86a;min-height:20px;padding:0 4px;}
+.hock-line{margin-top:10px;color:#a38a4a;font-style:italic;letter-spacing:.5px;font-size:13px;}
+.controls{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(5,6,9,.94);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:24px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+.overlay > :first-child{margin-top:auto;}
+.overlay > :last-child{margin-bottom:auto;}
+.overlay h1{font-size:22px;font-weight:400;letter-spacing:8px;color:var(--gold);margin:0 0 6px;text-align:center;}
+.overlay .sub{font-size:13px;color:var(--dim);letter-spacing:2px;margin-bottom:22px;text-align:center;max-width:520px;line-height:1.7;}
+.talent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;width:min(720px,100%);}
+.talent-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;text-align:left;cursor:pointer;color:var(--text);font-family:inherit;transition:.15s;}
+.talent-card:hover{border-color:var(--gold);background:#1b2029;transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.45);}
+.talent-card h3{margin:0 0 7px;font-size:15px;color:var(--gold);font-weight:600;letter-spacing:1.2px;}
+.talent-card p{margin:0;font-size:12px;color:var(--dim);line-height:1.55;}
+.talent-card.ancient{border-color:#4a2e78;background:linear-gradient(160deg,#160f1e,#14181f);}
+.talent-card.ancient:hover{border-color:#8a5ac9;box-shadow:0 8px 20px rgba(138,90,201,.2);}
+.talent-card.ancient h3{color:var(--purple);}
+.boss-choice-box{width:min(520px,100%);background:linear-gradient(180deg,#1a1114,#121016);border:1px solid #5a2a26;border-radius:14px;padding:30px 28px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px rgba(209,82,74,.08);transition:border-color .4s,box-shadow .4s,background .4s;}
+.boss-choice-box.daymare{background:linear-gradient(180deg,#160f1e,#0f0a16);border-color:#4a2e78;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px rgba(138,90,201,.12);}
+.boss-choice-box.azita{background:linear-gradient(180deg,#0d1a26,#0a1218);border-color:#2c5282;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px rgba(154,205,50,.18);}
+.boss-choice-box.ehsan{background:linear-gradient(180deg,#0d1a26,#0a1218);border-color:#2c5282;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px rgba(250,128,114,.18);}
+.boss-choice-name{margin:0 0 8px;font-size:clamp(24px,5vw,32px);letter-spacing:6px;color:#e8958e;font-weight:400;text-shadow:0 0 24px rgba(209,82,74,.3);}
+.boss-choice-box.daymare .boss-choice-name{color:var(--purple);text-shadow:0 0 24px rgba(138,90,201,.4);}
+.boss-choice-box.azita .boss-choice-name{color:#c8e85a;text-shadow:0 0 24px rgba(154,205,50,.55);}
+.boss-choice-box.ehsan .boss-choice-name{color:#ff9d8a;text-shadow:0 0 24px rgba(250,128,114,.55);}
+.boss-choice-desc{margin:0 0 24px;font-size:14px;line-height:2;color:#b9a9a5;letter-spacing:.5px;}
+.boss-choice-box.daymare .boss-choice-desc{color:#aaa0c0;}
+.boss-choice-box.azita .boss-choice-desc{color:#9aacbc;}
+.boss-choice-box.ehsan .boss-choice-desc{color:#b0a4a4;}
+.boss-choice-desc b{color:#e8958e;font-weight:600;}
+.boss-choice-box.daymare .boss-choice-desc b{color:var(--purple);}
+.boss-choice-box.azita .boss-choice-desc b{color:#b8e04a;}
+.boss-choice-box.ehsan .boss-choice-desc b{color:#ff9d8a;}
+.boss-choice-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.boss-choice-actions .btn{flex:1 1 120px;min-width:0;}
+#bankruptOverlay{z-index:400;background:rgba(5,3,4,.97);}
+.bankrupt-box{width:min(460px,100%);background:linear-gradient(180deg,#1a1114,#100a0c);border:1px solid #5a2a26;border-radius:16px;padding:36px 30px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.85),0 0 70px rgba(209,82,74,.18);}
+.bankrupt-title{margin:0 0 14px;font-size:clamp(24px,5.5vw,32px);letter-spacing:6px;color:#e8958e;font-weight:400;text-shadow:0 0 30px rgba(209,82,74,.45);}
+.bankrupt-desc{margin:0 0 26px;font-size:14px;line-height:2;color:#b9a9a5;letter-spacing:.5px;}
+.bankrupt-desc i{display:block;margin-top:10px;font-style:italic;color:#8a7b78;font-size:13px;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;width:min(620px,100%);}
+.stat-item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 12px;text-align:center;transition:.15s;}
+.stat-label{font-size:12px;letter-spacing:2px;color:var(--dim);margin-bottom:8px;white-space:nowrap;}
+.stat-value{font-size:22px;color:var(--gold);font-weight:600;letter-spacing:.5px;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.stat-value.profit-pos{color:var(--win);}.stat-value.profit-neg{color:var(--lose);}
+.stat-value .c-win{color:var(--win);}.stat-value .c-lose{color:var(--lose);}
+.stat-sep{color:#4a5160;margin:0 3px;font-weight:400;}
+.stat-sub{margin-top:6px;font-size:11px;letter-spacing:1px;color:#5d6472;}
+.story-overlay{z-index:60;}
+.story-box{width:min(640px,100%);background:linear-gradient(180deg,#151a23,#101419);border:1px solid var(--line);border-radius:14px;padding:30px 34px;box-shadow:0 20px 60px rgba(0,0,0,.6);position:relative;}
+.story-speaker{font-size:12px;letter-spacing:4px;color:var(--gold);margin-bottom:16px;}
+.story-text{font-size:16px;line-height:2.2;color:#d8d2c4;letter-spacing:1px;min-height:150px;}
+.story-text::after{content:'▍';color:var(--gold);opacity:.5;animation:blink 1s steps(2) infinite;}
+@keyframes blink{50%{opacity:0;}}
+.story-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap;}
+.story-actions .btn{flex:0 0 auto;min-width:120px;}
+.story-hint{margin-top:14px;font-size:11px;letter-spacing:1px;color:#5d6472;text-align:right;}
+.ach-tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:18px;width:100%;}
+.ach-tab{padding:6px 16px;font-size:12px;letter-spacing:2px;cursor:pointer;background:#1b202a;color:var(--dim);border:1px solid var(--line);border-radius:20px;font-family:inherit;transition:.15s;touch-action:manipulation;}
+.ach-tab:hover{color:var(--gold);border-color:var(--gold);}
+.ach-tab.active{background:linear-gradient(180deg,#2a2416,#1c1810);border-color:var(--gold);color:var(--gold);}
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;width:min(1000px,100%);}
+.ach-item{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 15px;opacity:.38;transition:.2s;}
+.ach-item.got{opacity:1;border-color:var(--gold);box-shadow:0 0 18px rgba(201,162,39,.12);background:linear-gradient(160deg,#1b1a12,#14181f);}
+.ach-item.ultimate.got{border-color:#e8cf6b;box-shadow:0 0 30px rgba(232,207,107,.35);background:linear-gradient(160deg,#2a2416,#1c1810);}
+.ach-icon{width:26px;height:26px;flex:0 0 26px;margin-top:1px;color:#5d6472;transition:color .25s,filter .25s;}
+.ach-item.got .ach-icon{color:var(--gold);filter:drop-shadow(0 0 5px rgba(201,162,39,.45));}
+.ach-item.ultimate.got .ach-icon{color:#e8cf6b;filter:drop-shadow(0 0 10px rgba(232,207,107,.7));}
+.ach-content{flex:1;min-width:0;}
+.ach-item h4{margin:0 0 5px;font-size:14px;color:var(--dim);letter-spacing:1.5px;font-weight:600;}
+.ach-item.got h4{color:var(--gold);}
+.ach-item.ultimate.got h4{color:#e8cf6b;}
+.ach-item p{margin:0;font-size:12px;color:#7d8494;line-height:1.55;}
+.rules-box{width:min(560px,100%);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px 28px;font-size:14px;line-height:2;color:#b9bec9;}
+.rules-box b{color:var(--gold);font-weight:600;}
+.rules-box .sep{height:1px;background:var(--line);margin:14px 0;}
+.toast-box{position:fixed;top:18px;right:18px;z-index:200;display:flex;flex-direction:column;gap:10px;pointer-events:none;max-width:calc(100vw - 36px);}
+.toast{display:flex;gap:12px;align-items:center;background:linear-gradient(160deg,#1e232e,#14181f);border:1px solid var(--gold);border-radius:10px;padding:12px 18px;min-width:230px;max-width:100%;box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 24px rgba(201,162,39,.15);animation:toastIn .35s ease-out;}
+.toast.out{animation:toastOut .35s ease-in forwards;}
+@keyframes toastIn{from{opacity:0;transform:translateX(30px);}to{opacity:1;transform:none;}}
+@keyframes toastOut{to{opacity:0;transform:translateX(30px);}}
+.toast-icon{width:30px;height:30px;flex:0 0 30px;color:var(--gold);filter:drop-shadow(0 0 8px rgba(201,162,39,.5));}
+.toast-body{flex:1;min-width:0;}
+.toast-label{font-size:11px;letter-spacing:3px;color:var(--gold);margin-bottom:4px;}
+.toast-name{font-size:16px;color:var(--text);margin-bottom:2px;letter-spacing:1px;}
+.toast-desc{font-size:12px;color:var(--dim);line-height:1.5;}
+.modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(5,6,9,.96);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .4s;}
+.modal-overlay.show{opacity:1;pointer-events:auto;}
+.modal-box{width:min(520px,100%);background:linear-gradient(180deg,#1a1428,#100a1a);border:1px solid #8a5ac9;border-radius:16px;padding:36px 30px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.8),0 0 60px rgba(138,90,201,.25);transform:scale(.9);transition:transform .4s;}
+.modal-overlay.show .modal-box{transform:scale(1);}
+.modal-box.gold{background:linear-gradient(180deg,#2a2416,#1a1408);border-color:#e8cf6b;box-shadow:0 30px 80px rgba(0,0,0,.8),0 0 60px rgba(232,207,107,.35);}
+.modal-title{font-size:14px;letter-spacing:6px;color:var(--purple);margin-bottom:12px;}
+.modal-box.gold .modal-title{color:#e8cf6b;}
+.modal-big{font-size:28px;letter-spacing:4px;color:#e8cf6b;margin:0 0 16px;font-weight:400;text-shadow:0 0 30px rgba(232,207,107,.4);}
+.modal-box:not(.gold) .modal-big{color:var(--purple);text-shadow:0 0 30px rgba(138,90,201,.5);}
+.modal-desc{font-size:14px;line-height:2;color:#b9a9c9;margin:0 0 20px;letter-spacing:.5px;}
+.modal-box.gold .modal-desc{color:#c9bea5;}
+.modal-list{font-size:13px;line-height:2.2;color:#8a7ba0;letter-spacing:1px;margin-bottom:24px;}
+.modal-box.gold .modal-list{color:#a89875;}
+.modal-list b{color:var(--purple);font-weight:600;}
+.modal-box.gold .modal-list b{color:#e8cf6b;}
+.enemy-skill-banner{position:fixed;top:80px;left:50%;z-index:180;transform:translateX(-50%) translateY(-20px);background:linear-gradient(180deg,#2a1a1a,#1a0f0f);border:1px solid #d1524a;border-radius:12px;padding:12px 26px;color:#e8958e;font-size:15px;letter-spacing:2px;white-space:nowrap;box-shadow:0 10px 40px rgba(0,0,0,.6),0 0 30px rgba(209,82,74,.3);opacity:0;pointer-events:none;transition:opacity .3s, transform .3s;font-family:inherit;}
+.enemy-skill-banner.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#fxCanvas{position:fixed;inset:0;z-index:150;pointer-events:none;}
+.fx-banner{position:fixed;inset:0;z-index:160;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;font-size:clamp(48px,13vw,120px);font-weight:400;letter-spacing:clamp(6px,2vw,22px);white-space:nowrap;}
+.fx-banner.show{animation:bannerPop 1.7s cubic-bezier(.2,.9,.25,1) forwards;}
+@keyframes bannerPop{0%{opacity:0;transform:scale(.55);filter:blur(14px);}16%{opacity:1;transform:scale(1.1);filter:blur(0);}28%{transform:scale(1);}72%{opacity:1;transform:scale(1);}100%{opacity:0;transform:scale(1.08) translateY(-16px);filter:blur(3px);}}
+.fx-banner.win{color:var(--gold);text-shadow:0 0 30px rgba(201,162,39,.95),0 0 70px rgba(201,162,39,.6),0 0 130px rgba(201,162,39,.3);}
+.fx-banner.lose{color:#d1524a;text-shadow:0 0 30px rgba(209,82,74,.95),0 0 70px rgba(209,82,74,.55),0 0 130px rgba(209,82,74,.25);}
+.fx-banner.push{color:#a4abb9;text-shadow:0 0 24px rgba(164,171,185,.7);}
+body.shake{animation:shakeAnim .55s cubic-bezier(.36,.07,.19,.97);}
+@keyframes shakeAnim{0%,100%{transform:translate(0,0);}10%{transform:translate(-9px,4px) rotate(-.4deg);}20%{transform:translate(8px,-5px) rotate(.4deg);}30%{transform:translate(-7px,-3px);}40%{transform:translate(7px,5px);}50%{transform:translate(-6px,3px);}60%{transform:translate(5px,-4px);}70%{transform:translate(-4px,2px);}80%{transform:translate(3px,-2px);}90%{transform:translate(-2px,1px);}}
+.table.flash-win{animation:flashWin 1s ease-out;}
+@keyframes flashWin{0%{box-shadow:0 0 0 rgba(201,162,39,0);}28%{box-shadow:0 0 70px rgba(201,162,39,.85),inset 0 0 46px rgba(201,162,39,.22);}100%{box-shadow:0 0 0 rgba(201,162,39,0);}}
+.table.flash-lose{animation:flashLose 1s ease-out;}
+@keyframes flashLose{0%{box-shadow:0 0 0 rgba(209,82,74,0);}28%{box-shadow:0 0 70px rgba(209,82,74,.7),inset 0 0 46px rgba(209,82,74,.28);}100%{box-shadow:0 0 0 rgba(209,82,74,0);}}
+.card.glow-win{animation:cardGlowWin 1.1s ease-out;}
+@keyframes cardGlowWin{0%{box-shadow:0 6px 16px rgba(0,0,0,.55);}35%{box-shadow:0 0 26px rgba(201,162,39,.95),0 6px 16px rgba(0,0,0,.55);}100%{box-shadow:0 6px 16px rgba(0,0,0,.55);}}
+.card.glow-lose{animation:cardGlowLose 1.1s ease-out;}
+@keyframes cardGlowLose{0%{box-shadow:0 6px 16px rgba(0,0,0,.55);}35%{box-shadow:0 0 26px rgba(209,82,74,.85),0 6px 16px rgba(0,0,0,.55);}100%{box-shadow:0 6px 16px rgba(0,0,0,.55);}}
+body.skill-flash::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:170;background:radial-gradient(circle at 50% 40%, rgba(201,162,39,.35), transparent 60%);animation:skillFlash .85s ease-out forwards;}
+@keyframes skillFlash{0%{opacity:0;}20%{opacity:1;}100%{opacity:0;}}
+.skill-choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:min(720px,100%);}
+.skill-choice-card{background:linear-gradient(160deg,#1e1a14,#12100c);border:2px solid var(--line);border-radius:14px;padding:22px 16px 18px;text-align:center;cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s;font-family:inherit;color:var(--text);display:flex;flex-direction:column;align-items:center;animation:skillCardEnter .55s cubic-bezier(.2,.9,.25,1) backwards;}
+.skill-choice-card:nth-child(1){animation-delay:0s;}
+.skill-choice-card:nth-child(2){animation-delay:0.1s;}
+.skill-choice-card:nth-child(3){animation-delay:0.2s;}
+@keyframes skillCardEnter{from{opacity:0;transform:translateY(50px) rotateY(-25deg) scale(.8);}to{opacity:1;transform:none;}}
+.skill-choice-card:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 12px 40px rgba(0,0,0,.6),0 0 30px rgba(201,162,39,.3);}
+.skill-choice-card .skill-card-icon{width:52px;height:52px;margin:0 auto 12px;color:var(--gold);filter:drop-shadow(0 0 10px rgba(201,162,39,.4));}
+.skill-choice-card .skill-card-icon svg{width:100%;height:100%;}
+.skill-choice-card .skill-card-name{font-size:16px;letter-spacing:2px;color:var(--gold);margin-bottom:10px;font-weight:600;}
+.skill-choice-card .skill-card-desc{font-size:12px;line-height:1.7;color:#b9b09a;letter-spacing:.3px;min-height:72px;}
+@media (max-width:640px){
+:root{--card-w:54px;--card-h:80px;--card-gap:6px;--card-corner:11px;--card-big:22px;--page-pad:12px;--table-pad:14px;--table-gap:16px;}
+.title-screen{min-height:calc(100vh - 24px);padding-top:clamp(24px,6vh,48px);}
+@supports (min-height:100dvh){.title-screen{min-height:calc(100dvh - 24px);}}
+.title-buttons{flex-direction:column;max-width:340px;gap:10px;}
+.title-buttons .btn{width:100%;min-width:0;flex:0 0 auto;padding:14px 10px;font-size:15px;}
+.title-links{margin-top:18px;gap:8px;}
+.link-btn{font-size:12px;padding:4px 6px;letter-spacing:1px;}
+.hud{gap:6px;margin-bottom:10px;}
+.hud-item{padding:7px 9px;font-size:11px;border-radius:8px;gap:4px;}
+.hud-item b{font-size:14px;}
+.topbar{gap:6px;margin-bottom:10px;}
+.talent-chip{font-size:11px;padding:3px 8px;}
+.boss-badge{font-size:11px;padding:3px 9px;}
+.mini-btn{padding:5px 10px;font-size:11px;letter-spacing:1px;}
+.side-head{font-size:12px;letter-spacing:1px;margin-bottom:8px;}
+.side-head b{font-size:14px;}
+.card{padding:4px;border-radius:7px;}
+.card .big{font-size:var(--card-big);}
+.message{font-size:13px;margin-top:12px;letter-spacing:.5px;line-height:1.6;}
+.notes{font-size:12px;line-height:1.7;}
+.hock-line{font-size:12px;margin-top:8px;}
+.controls{gap:8px;margin-top:12px;}
+.controls .btn{flex:1 1 calc(50% - 4px);min-width:0;padding:13px 6px;font-size:14px;letter-spacing:1px;border-radius:8px;}
+.overlay{padding:16px;}
+.overlay h1{font-size:18px;letter-spacing:5px;}
+.overlay .sub{font-size:12px;margin-bottom:16px;}
+.talent-grid{grid-template-columns:1fr;gap:9px;}
+.talent-card{padding:12px 14px;border-radius:9px;}
+.talent-card h3{font-size:14px;margin-bottom:5px;}
+.talent-card p{font-size:12px;line-height:1.6;}
+.boss-choice-box{padding:22px 18px;}
+.boss-choice-name{font-size:24px;letter-spacing:4px;}
+.boss-choice-desc{font-size:13px;line-height:1.8;margin-bottom:20px;}
+.bankrupt-box{padding:28px 22px;}
+.bankrupt-title{font-size:24px;letter-spacing:4px;}
+.bankrupt-desc{font-size:13px;line-height:1.9;margin-bottom:22px;}
+.stats-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+.stat-item{padding:13px 8px;border-radius:10px;}
+.stat-label{font-size:11px;letter-spacing:1px;margin-bottom:5px;}
+.stat-value{font-size:18px;}
+.stat-sub{font-size:10px;margin-top:4px;}
+.story-box{padding:22px 20px;border-radius:12px;}
+.story-speaker{font-size:11px;letter-spacing:2px;margin-bottom:12px;}
+.story-text{font-size:14px;line-height:1.95;min-height:130px;letter-spacing:.5px;}
+.story-actions{margin-top:16px;gap:8px;}
+.story-actions .btn{min-width:0;flex:1 1 calc(50% - 4px);padding:12px 8px;font-size:14px;}
+.story-hint{font-size:10px;margin-top:10px;}
+.ach-tabs{gap:6px;margin-bottom:14px;}
+.ach-tab{padding:5px 12px;font-size:11px;letter-spacing:1px;}
+.ach-grid{grid-template-columns:1fr;gap:8px;}
+.ach-item{padding:11px 13px;gap:10px;border-radius:9px;}
+.ach-icon{width:22px;height:22px;flex-basis:22px;}
+.ach-item h4{font-size:13px;}
+.ach-item p{font-size:11px;}
+.rules-box{padding:18px 16px;font-size:13px;line-height:1.85;}
+.rules-box .sep{margin:10px 0;}
+.toast-box{top:12px;right:12px;left:12px;max-width:none;}
+.toast{min-width:0;padding:10px 14px;gap:10px;}
+.toast-icon{width:26px;height:26px;flex-basis:26px;}
+.toast-name{font-size:15px;}
+.toast-desc{font-size:11px;}
+.modal-box{padding:26px 20px;}
+.modal-big{font-size:22px;letter-spacing:2px;}
+.modal-desc{font-size:13px;line-height:1.9;}
+.modal-list{font-size:12px;line-height:2;}
+.enemy-skill-banner{top:60px;font-size:13px;padding:10px 18px;letter-spacing:1px;}
+.skill-choice-grid{grid-template-columns:1fr;gap:10px;width:min(360px,100%);}
+.skill-choice-card{padding:16px 14px;border-radius:12px;}
+.skill-choice-card .skill-card-icon{width:40px;height:40px;margin-bottom:8px;}
+.skill-choice-card .skill-card-name{font-size:14px;margin-bottom:6px;}
+.skill-choice-card .skill-card-desc{font-size:11px;min-height:0;line-height:1.6;}
+}
+@media (max-width:360px){
+:root{--card-w:48px;--card-h:71px;--card-gap:5px;--card-corner:10px;--card-big:19px;}
+.hud-item{font-size:10px;padding:6px 7px;}
+.hud-item b{font-size:13px;}
+.controls .btn{font-size:13px;padding:12px 4px;}
+.mini-btn{padding:4px 8px;font-size:10px;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="fxCanvas"></canvas>
+<div class="fx-banner" id="fxBanner"></div>
+<div class="enemy-skill-banner" id="enemySkillBanner"></div>
+
+<div class="modal-overlay" id="specialModal">
+  <div class="modal-box" id="specialModalBox">
+    <div class="modal-title" id="specialModalTitle">—</div>
+    <h2 class="modal-big" id="specialModalBig">—</h2>
+    <p class="modal-desc" id="specialModalDesc">—</p>
+    <div class="modal-list" id="specialModalList"></div>
+    <button class="btn primary" id="btnCloseSpecial" style="min-width:160px;">继 续</button>
+  </div>
+</div>
+
+<div class="overlay" id="bankruptOverlay" style="display:none;">
+  <div class="bankrupt-box">
+    <h2 class="bankrupt-title">筹 码 耗 尽</h2>
+    <p class="bankrupt-desc">
+      霍科博尔德收走了最后一枚金币。
+      <i>“在布兰库格，输了就是输了。但牌桌永远可以重开。”</i>
+    </p>
+    <button class="btn primary" id="btnBankruptRestart" style="min-width:200px;">重 新 开 始</button>
+  </div>
+</div>
+
+<div class="screen title-screen" id="titleScreen">
+  <h1 class="logo">ARCANA 21</h1>
+  <p class="logo-sub">甜 美 的 骨 头 · 一 局</p>
+  <p class="logo-desc">
+    布兰库格，1930 年代。噤声居屋的火灾之后。<br>
+    霍科博尔德大师在“甜美的骨头”的包间里摊开一副旧牌。<br>
+    每局开局，他从筹码池中抽出五枚，推到你面前。
+  </p>
+  <div class="title-buttons">
+    <button class="btn primary" id="btnStart">进 入 牌 局</button>
+    <button class="btn" id="btnOpenAchTitle">成 就</button>
+    <button class="btn" id="btnStatsTitle">数 据 统 计</button>
+  </div>
+  <div class="title-links">
+    <button class="link-btn" id="btnStoryTitle">故事</button>
+    <span class="link-sep">·</span>
+    <button class="link-btn" id="btnRules">规则</button>
+  </div>
+  <div class="title-footer" id="titleStats">—</div>
+</div>
+
+<div class="screen game" id="gameScreen" style="display:none;">
+  <div class="hud">
+    <div class="hud-item"><span>筹码</span><b id="chips">200</b></div>
+    <div class="hud-item"><span>下注</span><b id="bet">0</b></div>
+    <div class="hud-item"><span>牌堆</span><b id="deckCount">52</b></div>
+  </div>
+  <div class="topbar">
+    <div class="talent-bar" id="talentBar">
+      <span class="boss-badge" id="bossBadge" style="display:none;"></span>
+    </div>
+    <div class="topbar-actions">
+      <button class="mini-btn" id="btnOpenAchGame">成就</button>
+      <button class="mini-btn danger" id="btnRestart">重新开始</button>
+      <button class="mini-btn" id="btnMenu">菜单</button>
+    </div>
+  </div>
+  <div class="table" id="tableEl">
+    <div class="side">
+      <div class="side-head"><span id="dealerName">霍科博尔德</span><b id="dealerScore">—</b></div>
+      <div class="cards" id="dealerCards"></div>
+    </div>
+    <div class="side">
+      <div class="side-head"><span>你 · 图书管理员</span><b id="playerScore">—</b></div>
+      <div class="cards" id="playerCards"></div>
+    </div>
+  </div> <div class="message" id="message">霍科博尔德推来一枚古金币。</div>
+  <div class="notes" id="notes"></div>
+  <div class="controls" id="betPanel">
+    <button class="btn" data-bet="10">下注 10</button>
+    <button class="btn" data-bet="25">下注 25</button>
+    <button class="btn" data-bet="50">下注 50</button>
+    <button class="btn" data-bet="all">全 下</button>
+  </div>
+  <div class="controls" id="actionPanel">
+    <button class="btn" id="btnHit">要牌 (H)</button>
+    <button class="btn" id="btnStand">停牌 (S)</button>
+    <button class="btn" id="btnDouble">双倍 (D)</button>
+    <button class="btn" id="btnNext">下一局 (N)</button>
+  </div>
+</div>
+
+<div class="overlay story-overlay" id="storyOverlay" style="display:none;">
+  <div class="story-box">
+    <div class="story-speaker">霍科博尔德大师 · 甜美的骨头</div>
+    <div class="story-text" id="storyText"></div>
+    <div class="story-actions">
+      <button class="btn" id="btnSkipStory">跳 过</button>
+      <button class="btn primary" id="btnStoryNext">继 续</button>
+    </div>
+    <div class="story-hint">点击继续 · Esc 跳过</div>
+  </div>
+</div>
+
+<div class="overlay" id="talentOverlay" style="display:none;">
+  <h1>选 一 枚 筹 码</h1>
+  <div class="sub" id="talentSub">从筹码池中随机抽取五枚，选择其一</div>
+  <div class="talent-grid" id="talentGrid"></div>
+</div>
+
+<div class="overlay" id="skillOverlay" style="display:none;">
+  <h1>技 艺 卡 牌</h1>
+  <div class="sub" id="skillSub">三张技艺浮现，选择其一触发</div>
+  <div class="skill-choice-grid" id="skillChoiceGrid"></div>
+  <button class="btn" id="btnSkillSkip" style="max-width:200px;margin-top:24px;">全 部 放 弃</button>
+</div>
+
+<div class="overlay" id="bossChoiceOverlay" style="display:none;">
+  <h1>B O S S   挑 战</h1>
+  <div class="sub">每三局，一位阴影中的对手现身</div>
+  <div class="boss-choice-box" id="bossChoiceBox">
+    <h2 class="boss-choice-name" id="bossChoiceName"></h2>
+    <p class="boss-choice-desc" id="bossChoiceDesc"></p>
+    <div class="boss-choice-actions">
+      <button class="btn" id="btnSkipBoss">跳 过</button>
+      <button class="btn primary" id="btnStartBoss">挑 战</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="achievementOverlay" style="display:none;">
+  <h1>成 就</h1>
+  <div class="sub" id="achProgress">0 / 0</div>
+  <div class="ach-tabs" id="achTabs">
+    <button class="ach-tab active" data-cat="all">全部</button>
+    <button class="ach-tab" data-cat="基础">基础</button>
+    <button class="ach-tab" data-cat="天赋">天赋</button>
+    <button class="ach-tab" data-cat="Boss">Boss</button>
+    <button class="ach-tab" data-cat="技能">技能</button>
+    <button class="ach-tab" data-cat="隐藏">隐藏</button>
+    <button class="ach-tab" data-cat="其他">其他</button>
+  </div>
+  <div class="ach-grid" id="achGrid"></div>
+  <button class="btn" id="btnCloseAch" style="max-width:200px;margin-top:24px;">关 闭</button>
+</div>
+
+<div class="overlay" id="statsOverlay" style="display:none;">
+  <h1>数 据 统 计</h1>
+  <div class="sub">霍科博尔德记下的每一笔账</div>
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-item"><div class="stat-label">累计赢钱</div><div class="stat-value" id="statProfit">0</div><div class="stat-sub">净盈亏合计</div></div>
+    <div class="stat-item"><div class="stat-label">胜 / 败</div><div class="stat-value"><span class="c-win" id="statWins">0</span><span class="stat-sep">/</span><span class="c-lose" id="statLosses">0</span></div><div class="stat-sub">分出胜负的局</div></div>
+    <div class="stat-item"><div class="stat-label">平局</div><div class="stat-value" id="statPushes">0</div><div class="stat-sub">退还本金的局</div></div>
+    <div class="stat-item"><div class="stat-label">总局数</div><div class="stat-value" id="statRounds">0</div><div class="stat-sub">完成的对局</div></div>
+    <div class="stat-item"><div class="stat-label">胜率</div><div class="stat-value" id="statWinRate">—</div><div class="stat-sub">胜 / (胜+败)</div></div>
+    <div class="stat-item"><div class="stat-label">最佳连胜</div><div class="stat-value" id="statStreak">0</div><div class="stat-sub">连续获胜记录</div></div>
+    <div class="stat-item"><div class="stat-label">最高筹码</div><div class="stat-value" id="statMaxChips">200</div><div class="stat-sub">历史峰值</div></div>
+    <div class="stat-item"><div class="stat-label">Blackjack</div><div class="stat-value" id="statBlackjack">0</div><div class="stat-sub">两张牌 21 点</div></div>
+    <div class="stat-item"><div class="stat-label">爆牌次数</div><div class="stat-value" id="statBusts">0</div><div class="stat-sub">点数超过 21</div></div>
+    <div class="stat-item"><div class="stat-label">Boss 击败</div><div class="stat-value" id="statBossWins">0</div><div class="stat-sub">流亡者 / 日魇 / 阿齐塔 / 埃桑</div></div>
+    <div class="stat-item"><div class="stat-label">成就进度</div><div class="stat-value" id="statAch">0/0</div><div class="stat-sub">已解锁 / 总数</div></div>
+  </div>
+  <button class="btn" id="btnCloseStats" style="max-width:200px;margin-top:24px;">关 闭</button>
+</div>
+
+<div class="overlay" id="rulesOverlay" style="display:none;">
+  <h1>规 则</h1>
+  <div class="sub">常理与例外</div>
+  <div class="rules-box">
+    <b>牌局</b>　尽量让手牌点数接近 21 且不超过。A 记 1 或 11，J/Q/K 记 10。庄家 17 点以下必须要牌。<br>
+    Blackjack 赔付 2.5 倍，普通胜利 2 倍，平局退还本金。
+    <div class="sep"></div>
+    <b>司辰筹码</b>　每局开局随机抽五枚天赋，选择其一改写规则。解锁 10 个成就后，六位远古司辰加入池中。
+    <div class="sep"></div>
+    <b>技艺卡牌</b>　你抽到第三张牌时，会随机浮现三张技艺，选择其一触发。
+    <div class="sep"></div>
+    <b>Boss 战</b>　每完成三局普通对局，可选择挑战一位 Boss。流亡者 / 访客日魇 / 阿齐塔 / 埃桑轮换。
+    <div class="sep"></div>
+    <b>筹码耗尽</b>　筹码归零时，牌局将暂时中止，你可以重新开始。
+    <div class="sep"></div>
+    <b>隐藏成就</b>　部分成就在达成前不会显示。
+    <div class="sep"></div>
+    <b>操作</b>　H 要牌 · S 停牌 · D 双倍 · N 下一局
+  </div>
+  <button class="btn" id="btnCloseRules" style="max-width:200px;margin-top:24px;">关 闭</button>
+</div>
+
+<div class="toast-box" id="toastBox"></div>
+
+<script>
+/* ================= 故事文本 ================= */
+const STORY_LINES = [
+  '图书管理员，请坐。别碰那杯酒，它比你想象的要烈。',
+  '我听说噤声居屋的火灾之后，你还在守着那些残页。很好——我讨厌把珍宝糟蹋在市井小民手中。',
+  '一局二十一点。你赢了，这枚古金币归你，算是我对那座可怜图书馆的捐赠。你输了，那本《我的事迹、我的力量、我的成就和我所面临的不公》，借我翻翻。',
+  '每一局开始前，我从桌上这些筹码里抽出五枚推到你面前。司辰的注视，加上我私人的两则赌约。也许更多。',
+  '选吧。然后下注。别让我后悔来这一趟。',
+];
+
+const HOCK_LINES = {
+  jackpot: ['“……有趣。看来你比那些残页更值得翻一翻。”','“Blackjack。可惜这不是威尼斯，不然我会再押一局。”'],
+  win: ['“嗯。运气，还是天赋？在这间屋子里，两者常常是一回事。”','“赢家不需要解释。至少今晚不需要。”','“不错。金币归你，但别急着走——夜还长。”'],
+  lose: ['“别急着捡起自己的自尊。牌桌从不负责安慰人。”','“输了就是输了。在布兰库格，这叫付学费。”','“下次记得，司辰的注视不是免费的。”'],
+  push: ['“平局。最无聊的结果，也最诚实。”','“平局。看来今晚我们都还不想收手。”'],
+  bust: ['“贪心。在布兰库格，贪心是要付利息的。”','“爆了。你刚刚把自己的血肉押了上去。”'],
+};
+
+const BOSS_LINES = {
+  exile: {
+    jackpot: ['“……运气。我讨厌运气。”','“Blackjack。你以为这能改变什么？”'],
+    win: ['“你赢了。这一局。别以为我会记住。”','“钱归你。就像一切都归你一样——暂时。”','“不错。但流亡者从不真正输。”'],
+    lose: ['“钱归我。就像一切都归我一样，迟早。”','“输了就是输了。我从不赊账。”','“你刚才押上的，不只是筹码。”'],
+    push: ['“平局。无聊。下次我会押更多。”','“平局。流亡者最不缺的就是等待。”'],
+    bust: ['“爆了。看吧，贪心总得有个尽头。”','“你把血肉押了上去，然后烧掉了它。”'],
+  },
+  daymare: {
+    jackpot: ['“Blackjack。我该重新评估你的信用评级了。”','“二十一点。亲爱的，你让我意外了。”'],
+    win: ['“你赢了。我会把它记在账上——别以为这不算数。”','“不错。司库从不为赢家哭泣。”','“金币归你。但账簿还在我手里。”'],
+    lose: ['“啊，亲爱的。账本上又多了一笔。”','“输了。别担心，我会替你记着的。”','“这笔咨询费，你付得很体面。”'],
+    push: ['“平局。最无聊的账目，最不容易出错。”','“平局。账簿上写着一笔对消。”'],
+    bust: ['“爆了。贪婪是最昂贵的奢侈品。”','“亲爱的，你把本金烧在了桌上。”'],
+  },
+  azita: {
+    jackpot: ['“Blackjack。一步好棋……但棋局还没结束。”','“二十一点。看来你并不只是个管书的。”'],
+    win: ['“……将死。你的棋艺比你的档案管理更出色。”','“你赢了这一局。但棋盘上，胜负从来不止一局。”','“不错。我会记住这一步。”'],
+    lose: ['“将军。下次记得，棋子不该与棋手对弈。”','“你输了。在撒马尔罕，我们管这叫‘学费’。”','“棋局结束。但账还没清。”'],
+    push: ['“和棋。最无趣的结局，但至少不是败局。”','“平局。棋盘上多了一颗悬而未决的棋子。”'],
+    bust: ['“爆了。你太急着吃子，却忘了看棋盘。”','“贪吃。象棋里，贪吃的人输得最快。”'],
+  },
+  ehsan: {
+    jackpot: ['“哦，二十一点。看来我的处方对你没什么帮助。”','“Blackjack。我该重新配一副药了。”'],
+    win: ['“你赢了。别担心，我随时都在。”','“看来你不需要我的药。”','“下次来看诊时，记得提前预约。”'],
+    lose: ['“我说过要照顾好自己。这就是为什么。”','“输了不要紧，健康最重要。”','“如果你早点听我的建议——”'],
+    push: ['“平局。药性刚好中和。”','“平局。就像两剂相抵。”'],
+    bust: ['“爆了。你太急了。急是治不好病的。”','“贪心是病，得治。”'],
+  },
+};
+
+/* ================= 牌堆 ================= */
+const SUITS = [{sym:'♠',color:'black'},{sym:'♥',color:'red'},{sym:'♦',color:'red'},{sym:'♣',color:'black'}];
+const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+let cardSeq = 0;
+function makeCard(suit, rank) {
+  const basePts = rank === 'A' ? 1 : (['J','Q','K'].includes(rank) ? 10 : parseInt(rank, 10));
+  return { id:++cardSeq, suit, rank, points:null, mechanism:null, modified:false, isPrescription:false, _origRank:rank, _origPoints:basePts };
+}
+function newDeck() { const d=[]; for (const s of SUITS) for (const r of RANKS) d.push(makeCard(s,r)); return d; }
+function shuffle(a) { for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+const MECHANISMS = {};
+function triggerHook(card, hook, ctx) {
+  if (!card || !card.mechanism) return;
+  const m = MECHANISMS[card.mechanism];
+  if (m && typeof m[hook]==='function') { try{m[hook](ctx);}catch(e){console.error(e);} }
+}
+function triggerHandHook(cards, hook, ctx) { for (const c of cards) triggerHook(c, hook, {...ctx, card:c}); }
+
+/* ================= 点数 ================= */
+function cardValue(c) {
+  if (typeof c.points==='number') return c.points;
+  if (c.rank==='A') return 1;
+  if (c.rank==='J'||c.rank==='Q'||c.rank==='K') return 10;
+  return parseInt(c.rank,10);
+}
+function handValue(cards) {
+  let total=0, aces=0;
+  for (const c of cards) {
+    if (c.rank==='A' && typeof c.points!=='number') { aces++; total+=1; }
+    else total += cardValue(c);
+  }
+  let soft=false;
+  if (aces>0 && total+10<=21) { total+=10; soft=true; }
+  return { value: total, soft };
+}
+function playerHandValue() {
+  let v = handValue(state.player);
+  if (hasTalent('chandler')) {
+    const dv = dealerHandValue().value;
+    if (v.value < dv) {
+      let t=0, aces=0;
+      for (const c of state.player) {
+        if (c.rank==='A' && typeof c.points!=='number') aces++;
+        else t += cardValue(c);
+      }
+      if (aces>0) { v.value = t + aces*11; v.soft = true; }
+    }
+  }
+  if (hasTalent('wheel') && v.value < 15) { v.value = 15; v.soft = false; }
+  if (state.boss.active) v.value += state.boss.playerBonus;
+  v.value += state.skillBonus.player;
+  return v;
+}
+function dealerHandValue() {
+  const h = handValue(state.dealer);
+  if (state.boss.active) {
+    h.value += state.boss.dealerBonus;
+    if (state.boss.type === 'ehsan') h.value -= (state.boss.ehsanHealOffset || 0);
+  }
+  h.value += state.skillBonus.dealer;
+  return h;
+}
+function isBlackjack(cards) { return cards.length===2 && handValue(cards).value===21; }
+
+/* ================= 天赋 ================= */
+const TALENTS = {
+  hidden: { name:'隐而不显', desc:'对手最终点数为 7 的倍数时归零——7、14、21，圆满者皆隐去。' },
+  four: { name:'4444', desc:'结算时，点数若为 4 的倍数，该方直接获胜。' },
+  moth: { name:'飞蛾', desc:'混沌与寻觅。结算时，你的点数随机 +10 或 -10。' },
+  door: { name:'瞳中之扉', desc:'知识与启迪守门人。每局发牌后，你可看到牌堆顶的一张牌。' },
+  velvet: { name:'丝绒', desc:'沉默的守密者。对手的暗牌在本局中始终隐藏。胜利时额外获得 10 筹码。' },
+  yew: { name:'环杉', desc:'林地奇想。你每次要牌时，30% 概率额外抽一张牌。' },
+  thunder: { name:'轰雷之皮', desc:'心跳的韵律。你每有一张 A，最终点数额外 +2。' },
+  mother: { name:'蚁母', desc:'洞开与启门。每局一次，弃一张手牌并重抽。' },
+  witchsister: { name:'双生女巫', desc:'孪生丰饶。胜利时，赌注额外 +50%。' },
+  colonel: { name:'上校', desc:'刃之司辰。爆牌阈值提高至 23 点；与对手同为 21 点平局时获胜。此外，双方都更容易抽到接近 21 点的牌。' },
+  lion: { name:'狮子匠', desc:'重铸与馈赠。开局随机获得另外两种天赋。' },
+  poet: { name:'悼歌诗人', desc:'冬之哀悼。失败时返还 30% 赌注。' },
+  crow: { name:'拾滩鸦', desc:'明晓失物。要牌抽到 ≤3 时可重抽一次。' },
+  moon: { name:'弧月', desc:'内外相易。结算时若你比对手低 1~5 点，交换双方点数。' },
+  sun: { name:'残阳', desc:'无情难测。结算时对手点数随机 ±2。' },
+  axe: { name:'双角斧', desc:'门关允行。每局第一次要牌必定不会爆牌。' },
+  dawn: { name:'昕旦', desc:'灰烬账簿。每赢一局，下局赌注上限提高 50%。' },
+  cup: { name:'赤杯', desc:'血与吞食。胜利时额外获得对手点数的筹码（上限 21）。' },
+  wolf: { name:'裂分之狼', desc:'毁灭。结算时双方各随机 -1~6。' },
+  traveler: { name:'浪游旅人', desc:'道路与闰时。每局一次，将一张手牌与牌堆顶交换。' },
+  witchmaid: { name:'双生巫女', desc:'心相编织。软牌最终点数额外 +3。' },
+  florist: { name:'制花人', desc:'爱与渴慕。每次停牌恢复 5 筹码。' },
+  forge: { name:'白日铸炉', desc:'毁灭与再造。开局弃一张起始手牌并重抽。' },
+  giribrago: { name:'耀山之隙', desc:'收容与赠礼。每局开始时获得 15 筹码。' },
+  snow: { name:'白雪', desc:'纯白死寂。对手的第一次要牌被取消。' },
+  blackbone: { name:'黑骸', desc:'未知沉默。你的点数不被任何效果改变。' },
+  spider: { name:'扶摇蜘蛛', desc:'虚界编织。平局时你直接获胜。' },
+  crown: { name:'戴冠之孳', desc:'腐化蔓延。对手出牌完全随机化。' },
+  fruit: { name:'光明果', desc:'根冠庇护。你的第一次爆牌会被抵消。' },
+  horse: { name:'树中牝马', desc:'焚烧灰烬。每局发牌后烧掉对手一张牌。' },
+  witness: { name:'见证人', desc:'午港之泉令世界忘记你，但见证者不会。每局一次，自动否决对手要到的第一张牌并令其重抽。' },
+  chandler: { name:'制烛人', desc:'临界态的司辰。当你点数低于对手时，你手牌中所有 A 均按 11 计算。' },
+  sevenCoils: { name:'七蟠', desc:'远古石源神。你每赢一局，下一局基础下注 +10（临时）。', ancient:true },
+  wheel: { name:'转轮', desc:'生命力曾流入大地之血。你的最终点数不会低于 15。', ancient:true },
+  flint: { name:'燧石', desc:'与星空和毁灭有关的石源神。每局一次，可将被改动过点数的牌重置为原始点数。', ancient:true },
+  tide: { name:'浪潮', desc:'被赤杯饮干的石源神。结算时你的点数如潮水般随机 ±3。', ancient:true },
+  egg: { name:'逆孵之卵', desc:'逃入辉光的石源神。每局一次，即将爆牌时自动弃掉最后一张牌并停牌。', ancient:true },
+  brightSun: { name:'骄阳', desc:'曾经的漫宿至尊。你的 Blackjack 赔付提升至 3 倍，但普通胜利赔付降至 1.5 倍。', ancient:true },
+};
+
+const BASE_TALENT_IDS = ['hidden','four','moth','door','velvet','yew','thunder','mother','witchsister','colonel','lion','poet','crow','moon','sun','axe','dawn','cup','wolf','traveler','witchmaid','florist','forge','giribrago','snow','blackbone','spider','crown','fruit','horse','witness','chandler'];
+const ANCIENT_TALENT_IDS = ['sevenCoils','wheel','flint','tide','egg','brightSun'];
+const TALENT_DRAW_COUNT = 5;
+let currentTalentChoices = [];
+
+function activeTalentPool() { return save.ancientUnlocked ? [...BASE_TALENT_IDS, ...ANCIENT_TALENT_IDS] : [...BASE_TALENT_IDS]; }
+function rollTalentChoices() { const pool = shuffle(activeTalentPool()); currentTalentChoices = pool.slice(0, TALENT_DRAW_COUNT); }
+
+/* ================= 音效 ================= */
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return null; }
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function playTone(freq, duration, type = 'sine', volume = 0.12) {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  const now = ctx.currentTime;
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(volume, now + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+  osc.start(now);
+  osc.stop(now + duration);
+}
+const SFX = {
+  deal() { playTone(220, 0.08, 'sine', 0.07); },
+  hit() { playTone(330, 0.1, 'triangle', 0.09); },
+  stand() {
+    playTone(220, 0.15, 'sine', 0.09);
+    setTimeout(() => playTone(165, 0.2, 'sine', 0.07), 80);
+  },
+  win() {
+    [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => playTone(f, 0.2, 'triangle', 0.11), i * 100));
+  },
+  jackpot() {
+    [523, 659, 784, 1047, 1319, 1568].forEach((f, i) => setTimeout(() => playTone(f, 0.25, 'triangle', 0.12), i * 80));
+  },
+  lose() {
+    [330, 262, 196].forEach((f, i) => setTimeout(() => playTone(f, 0.3, 'sawtooth', 0.07), i * 130));
+  },
+  push() { playTone(330, 0.3, 'sine', 0.07); },
+  bust() { playTone(120, 0.5, 'sawtooth', 0.13); },
+  achievement() {
+    [784, 988, 1175].forEach((f, i) => setTimeout(() => playTone(f, 0.18, 'sine', 0.11), i * 90));
+  },
+  boss() {
+    [110, 110, 165, 82].forEach((f, i) => setTimeout(() => playTone(f, 0.4, 'sawtooth', 0.09), i * 150));
+  },
+  skill() {
+    [660, 880, 1100].forEach((f, i) => setTimeout(() => playTone(f, 0.15, 'triangle', 0.07), i * 60));
+  },
+    click() { playTone(880, 0.04, 'sine', 0.04); },
+  dogBark() {
+    const ctx = getAudioCtx();
+    if (!ctx) return;
+    const bark = (startTime, baseFreq) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = baseFreq * 2;
+      filter.Q.value = 2;
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(baseFreq * 1.6, startTime);
+      osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.6, startTime + 0.12);
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(0.18, startTime + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.18);
+      osc.start(startTime);
+      osc.stop(startTime + 0.2);
+    };
+    const now = ctx.currentTime;
+    bark(now, 220);
+    bark(now + 0.18, 260);
+  },
+};
+/* ================= 技能牌 ================= */
+function svgIcon(p) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>'; }
+
+const SKILL_CARDS = {
+  spice: { name:'香料与滋味', desc:'没有食物就没有献祭。对手点数 +2。', icon: svgIcon('<path d="M8 6 Q8 4 12 4 Q16 4 16 6 L16 9 Q16 12 12 12 Q8 12 8 9 Z"/><path d="M10 12 L10 20"/><path d="M14 12 L14 20"/><path d="M7 20 L17 20"/>') },
+  glass: { name:'玻璃与锻光', desc:'刚毅而脆。对手下次要牌时，高点数牌被推上前。', icon: svgIcon('<path d="M4 20 L8 4 L12 12 L16 4 L20 20 Z"/><circle cx="12" cy="16" r="1.5"/>') },
+  force: { name:'武力之敕令', desc:'“假如我直接赢。”', icon: svgIcon('<circle cx="12" cy="12" r="8"/><path d="M8 12 L16 12"/><path d="M12 8 L12 16"/>') },
+  transmute: { name:'嬗变与解放', desc:'施法者第二张手牌变为 A。', icon: svgIcon('<path d="M12 3 L15 9 L21 10 L17 14 L18 20 L12 17 L6 20 L7 14 L3 10 L9 9 Z"/>') },
+  refine: { name:'精炼与擢升', desc:'施法者第二张手牌变为 K。', icon: svgIcon('<path d="M6 20 L6 8 Q6 4 12 4 Q18 4 18 8 L18 20"/><path d="M6 20 L18 20"/><path d="M9 12 L9 16"/>') },
+  bell: { name:'洪钟与铜器', desc:'钟声落下，对手最多再抽一张牌。', icon: svgIcon('<path d="M12 3 Q7 3 7 10 L7 16 L5 19 L19 19 L17 16 L17 10 Q17 3 12 3 Z"/><path d="M10 19 Q10 22 12 22 Q14 22 14 19"/>') },
+  sharp: { name:'锋锐', desc:'切碎对手抽到的第一张牌。对流亡者无效。', icon: svgIcon('<path d="M4 20 L16 8"/><path d="M16 8 L20 4"/><path d="M6 16 L10 20"/>') },
+  kettle: { name:'水壶', desc:'结算时，双方点数取平均值（向下取整）。', icon: svgIcon('<path d="M8 8 Q6 12 8 16 Q10 20 12 20 Q14 20 16 16 Q18 12 16 8"/><path d="M6 6 L18 6"/><path d="M9 4 L15 4"/>') },
+  flute: { name:'马扎林横笛', desc:'吹响它，查看牌堆顶三张，并按选择重排。', icon: svgIcon('<path d="M3 12 L21 12"/><path d="M6 9 L6 15"/><path d="M10 9 L10 15"/><path d="M14 9 L14 15"/><path d="M18 9 L18 15"/>') },
+  resurgence: { name:'复苏与羽化', desc:'弃一张手牌，抽两张牌，但新抽的牌各 -1。', icon: svgIcon('<path d="M12 2 Q6 6 6 12 Q6 18 12 22"/><path d="M12 2 Q18 6 18 12 Q18 18 12 22"/>') },
+  strings: { name:'弦乐与歌谣', desc:'本局剩余时间内，你每抽到一张偶数牌，获得 +1 筹码。', icon: svgIcon('<path d="M4 6 Q8 2 12 6 Q16 10 20 6"/><path d="M4 12 Q8 8 12 12 Q16 16 20 12"/><path d="M4 18 Q8 14 12 18 Q16 22 20 18"/>') },
+  stitching: { name:'缝合与装订', desc:'抵消你下一次受到的负面点数修正，将其归零。', icon: svgIcon('<path d="M4 20 L12 12 L20 4"/><path d="M8 4 L12 8 L16 4"/><path d="M8 20 L12 16 L16 20"/>') },
+  orchids: { name:'兰花与迷药', desc:'对手下一张明牌的花色被强制改变（随机）。', icon: svgIcon('<path d="M12 21 L12 14"/><path d="M12 14 Q7 12 7 8 Q7 4 12 4 Q17 4 17 8 Q17 12 12 14 Z"/>') },
+  sights: { name:'景象与感知', desc:'查看牌堆顶三张，保留其中一张加入手牌，其余放回。', icon: svgIcon('<path d="M3 12 Q12 5 21 12 Q12 19 3 12 Z"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2 L12 6"/>') },
+  insects: { name:'昆虫与花蜜', desc:'复制对手上一张牌的花色，从牌堆中抽一张同花色的牌。', icon: svgIcon('<path d="M12 2 Q16 6 16 12 Q16 18 12 22 Q8 18 8 12 Q8 6 12 2 Z"/><path d="M12 8 L12 16"/>') },
+  lens: { name:'蒂尔黛透镜', desc:'对手立刻弃掉一张手牌（头痛）。脆弱，一次即碎。', icon: svgIcon('<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/><path d="M12 2 L12 5 M12 19 L12 22 M2 12 L5 12 M19 12 L22 12"/>') },
+  thunderstruck: { name:'襁褓雷霆', desc:'本局中你的爆牌阈值提高 1 点（22 点才爆），且停牌时获得 +3 筹码。', icon: svgIcon('<path d="M13 2 L6 14 L11 14 L9 22 L18 10 L13 10 Z"/>') },
+  timeharp: { name:'时键琴', desc:'撤销你上一次操作（要牌则收回，停牌则回到停牌前）。每局只能触发一次。', icon: svgIcon('<circle cx="12" cy="12" r="8"/><path d="M12 6 L12 12 L16 14"/><path d="M3 3 L6 6"/><path d="M21 3 L18 6"/>') },
+  bronze: { name:'青铜刀', desc:'摧毁对手牌堆顶的 3 张牌（移出本局游戏）。不可阻挡。', icon: svgIcon('<path d="M4 20 L16 8"/><path d="M16 8 L20 4"/><path d="M6 16 L10 20"/>') },
+};
+
+/* ================= 成就 ================= */
+const STORAGE_KEY = 'arcana21_save_v9';
+const START_CHIPS = 200;
+const ULTIMATE_REQUIRED = 65;
+
+const ACHIEVEMENTS = [
+  { id:'first_blood', name:'初次交汇', desc:'在甜美的骨头赢下第一局牌。', icon: svgIcon('<path d="M3 21 L19 5"/><path d="M21 21 L5 5"/><path d="M17 7 L21 3"/><path d="M7 7 L3 3"/>') },
+  { id:'blackjack_1', name:'二十一点', desc:'首次获得 Blackjack。', icon: svgIcon('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M12 7 L15 12 L12 17 L9 12 Z"/>') },
+  { id:'blackjack_5', name:'五度圆满', desc:'累计获得 5 次 Blackjack。', icon: svgIcon('<path d="M12 2 L17.9 20.1 L2.5 8.9 L21.5 8.9 L6.1 20.1 Z"/>') },
+  { id:'streak_3', name:'连奏', desc:'连续赢下 3 局牌。', icon: svgIcon('<path d="M3 18 L8 12 L12 15 L21 5"/><circle cx="3" cy="18" r="1.2"/><circle cx="8" cy="12" r="1.2"/><circle cx="12" cy="15" r="1.2"/><circle cx="21" cy="5" r="1.2"/>') },
+  { id:'chips_500', name:'富者', desc:'筹码达到 500。', icon: svgIcon('<ellipse cx="12" cy="19" rx="8" ry="2.5"/><ellipse cx="12" cy="15" rx="8" ry="2.5"/><ellipse cx="12" cy="11" rx="8" ry="2.5"/><ellipse cx="12" cy="7" rx="8" ry="2.5"/>') },
+  { id:'bust_5', name:'五度倾覆', desc:'累计爆牌 5 次。', icon: svgIcon('<path d="M12 2 L13.8 8.2 L20 6 L17 12 L22 15 L16 16 L17 22 L12 18 L7 22 L8 16 L2 15 L7 12 L4 6 L10.2 8.2 Z"/>') },
+  { id:'rounds_20', name:'常客', desc:'完成 20 局牌。', icon: svgIcon('<path d="M5 3 L19 3"/><path d="M5 21 L19 21"/><path d="M6 3 Q6 8 12 12 Q18 8 18 3"/><path d="M6 21 Q6 16 12 12 Q18 16 18 21"/>') },
+  { id:'all_talents', name:'三十二枚筹码', desc:'用全部 32 种基础天赋各赢下一局。', icon: svgIcon('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="3" r="1" fill="currentColor"/><circle cx="19.03" cy="6.38" r="1" fill="currentColor"/><circle cx="20.78" cy="14.01" r="1" fill="currentColor"/><circle cx="15.91" cy="20.11" r="1" fill="currentColor"/><circle cx="8.09" cy="20.11" r="1" fill="currentColor"/><circle cx="3.22" cy="14.01" r="1" fill="currentColor"/><circle cx="4.97" cy="6.38" r="1" fill="currentColor"/>') },
+  { id:'talent_hidden', name:'隐而不显的注视', desc:'使用「隐而不显」赢下一局。', icon: svgIcon('<path d="M3 12 Q12 5 21 12 Q12 19 3 12 Z"/><circle cx="12" cy="12" r="2.5"/><path d="M4 4 L20 20"/>') },
+  { id:'talent_four', name:'斜角鱼眼', desc:'使用「4444」赢下一局。', icon: svgIcon('<rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/>') },
+  { id:'talent_moth', name:'飞蛾的混沌', desc:'使用「飞蛾」赢下一局。', icon: svgIcon('<path d="M12 8 L12 20"/><path d="M12 11 Q5 3 2 11 Q5 16 12 13"/><path d="M12 11 Q19 3 22 11 Q19 16 12 13"/>') },
+  { id:'talent_door', name:'瞳中之扉的启迪', desc:'使用「瞳中之扉」赢下一局。', icon: svgIcon('<path d="M3 12 Q12 5 21 12 Q12 19 3 12 Z"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2 L12 5"/>') },
+  { id:'talent_velvet', name:'无伤之夜', desc:'使用「无伤之夜」赢下一局。', icon: svgIcon('<path d="M4 4 Q12 10 20 4"/><path d="M4 20 Q12 14 20 20"/><path d="M4 4 L4 20"/><path d="M20 4 L20 20"/>') },
+  { id:'talent_yew', name:'环杉的奇想', desc:'使用「环杉」赢下一局。', icon: svgIcon('<path d="M12 21 L12 8"/><path d="M12 12 Q6 8 4 14 Q8 16 12 14"/><path d="M12 12 Q18 8 20 14 Q16 16 12 14"/>') },
+  { id:'talent_thunder', name:'轰雷之皮的韵律', desc:'使用「轰雷之皮」赢下一局。', icon: svgIcon('<path d="M3 12 Q7 6 12 12 Q17 18 21 12"/><path d="M3 16 Q7 10 12 16 Q17 22 21 16"/><circle cx="12" cy="12" r="1" fill="currentColor"/>') },
+  { id:'talent_mother', name:'蚁母的洞开', desc:'使用「蚁母」赢下一局。', icon: svgIcon('<path d="M12 2 Q12 8 6 12 Q12 16 12 22"/><path d="M12 2 Q12 8 18 12 Q12 16 12 22"/><path d="M6 12 L18 12"/>') },
+  { id:'talent_witchsister', name:'双生女巫的丰饶', desc:'使用「双生女巫」赢下一局。', icon: svgIcon('<circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/>') },
+  { id:'talent_colonel', name:'上校的征服', desc:'使用「上校」赢下一局。', icon: svgIcon('<path d="M4 20 L20 4"/><path d="M4 4 L20 20"/><path d="M8 8 L16 16"/><path d="M16 8 L8 16"/>') },
+  { id:'talent_lion', name:'狮子匠的馈赠', desc:'使用「狮子匠」赢下一局。', icon: svgIcon('<circle cx="12" cy="12" r="4"/><path d="M12 2 L12 5 M12 19 L12 22 M2 12 L5 12 M19 12 L22 12"/><path d="M5 5 L7 7 M17 17 L19 19 M19 5 L17 7 M5 19 L7 17"/>') },
+  { id:'talent_poet', name:'悼歌诗人的哀悼', desc:'使用「悼歌诗人」赢下一局。', icon: svgIcon('<path d="M8 4 L8 16 Q8 20 12 20 Q16 20 16 16 L16 6"/><path d="M8 8 L16 8"/>') },
+  { id:'talent_crow', name:'拾滩鸦的失物', desc:'使用「拾滩鸦」赢下一局。', icon: svgIcon('<path d="M6 20 L6 10 Q6 6 12 6 Q18 6 18 10 L18 20"/><path d="M9 10 L9 14 M15 10 L15 14"/><circle cx="12" cy="10" r="1.5"/>') },
+  { id:'talent_moon', name:'弧月的倒影', desc:'使用「弧月」赢下一局。', icon: svgIcon('<path d="M20 14 A8 8 0 1 1 10 4 A6 6 0 0 0 20 14 Z"/><circle cx="16" cy="8" r="1" fill="currentColor"/>') },
+  { id:'talent_sun', name:'残阳的冷漠', desc:'使用「残阳」赢下一局。', icon: svgIcon('<circle cx="12" cy="12" r="5"/><path d="M12 2 L12 5 M12 19 L12 22 M2 12 L5 12 M19 12 L22 12"/><path d="M5 5 L7 7 M17 17 L19 19 M19 5 L17 7 M5 19 L7 17"/>') },
+  { id:'talent_axe', name:'双角斧的门关', desc:'使用「双角斧」赢下一局。', icon: svgIcon('<path d="M4 4 L12 12 L4 20"/><path d="M20 4 L12 12 L20 20"/><path d="M4 12 L20 12"/>') },
+  { id:'talent_dawn', name:'受施之默', desc:'使用「受施之默」赢下一局。', icon: svgIcon('<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 8 L16 8 M8 12 L16 12 M8 16 L12 16"/>') },
+  { id:'talent_cup', name:'赤杯的飨宴', desc:'使用「赤杯」赢下一局。', icon: svgIcon('<path d="M6 4 L18 4 L16 14 Q12 18 8 14 Z"/><path d="M12 18 L12 22"/><path d="M8 22 L16 22"/>') },
+  { id:'talent_wolf', name:'狼之分裂', desc:'使用「裂分之狼」赢下一局。', icon: svgIcon('<path d="M4 3 L4 9 L7 7"/><path d="M20 3 L20 9 L17 7"/><path d="M4 9 Q4 19 12 21 Q20 19 20 9 Q16 11 12 11 Q8 11 4 9 Z"/><circle cx="9" cy="14" r="0.9"/><circle cx="15" cy="14" r="0.9"/>') },
+  { id:'talent_traveler', name:'浪游旅人的道路', desc:'使用「浪游旅人」赢下一局。', icon: svgIcon('<path d="M4 20 Q8 4 12 12 Q16 20 20 4"/><circle cx="4" cy="20" r="1.5"/><circle cx="20" cy="4" r="1.5"/>') },
+  { id:'talent_witchmaid', name:'双生巫女的编织', desc:'使用「双生巫女」赢下一局。', icon: svgIcon('<path d="M12 3 L12 21"/><path d="M3 12 L21 12"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="2"/>') },
+  { id:'talent_florist', name:'制花人的渴慕', desc:'使用「制花人」赢下一局。', icon: svgIcon('<path d="M12 21 L12 14"/><path d="M12 14 Q7 12 7 8 Q7 4 12 4 Q17 4 17 8 Q17 12 12 14 Z"/>') },
+  { id:'talent_forge', name:'白日铸炉的再造', desc:'使用「白日铸炉」赢下一局。', icon: svgIcon('<path d="M12 2 L12 8"/><path d="M8 8 L16 8"/><path d="M8 8 Q8 17 12 18 Q16 17 16 8"/><path d="M6 20 L18 20"/>') },
+  { id:'talent_giribrago', name:'耀山之隙的赠礼', desc:'使用「耀山之隙」赢下一局。', icon: svgIcon('<path d="M12 21 L12 10"/><path d="M12 10 L6 4"/><path d="M12 10 L18 4"/><path d="M12 14 L7 18"/><path d="M12 14 L17 18"/>') },
+  { id:'talent_snow', name:'白雪的死寂', desc:'使用「白雪」赢下一局。', icon: svgIcon('<path d="M12 2 L12 22"/><path d="M2 12 L22 12"/><path d="M5 5 L19 19"/><path d="M19 5 L5 19"/>') },
+  { id:'talent_blackbone', name:'黑骸的沉默', desc:'使用「黑骸」赢下一局。', icon: svgIcon('<circle cx="12" cy="12" r="8"/><path d="M6.5 6.5 L17.5 17.5"/><circle cx="12" cy="12" r="2" fill="currentColor"/>') },
+  { id:'talent_spider', name:'扶摇蜘蛛的编织', desc:'使用「扶摇蜘蛛」赢下一局。', icon: svgIcon('<path d="M12 12 L12 2"/><path d="M12 12 L20 6"/><path d="M12 12 L20 18"/><path d="M12 12 L12 22"/><path d="M12 12 L4 18"/><path d="M12 12 L4 6"/><circle cx="12" cy="12" r="3"/>') },
+  { id:'talent_crown', name:'冠冕之孳的腐化', desc:'使用「戴冠之孳」赢下一局。', icon: svgIcon('<path d="M3 19 L5 8 L9 13 L12 5 L15 13 L19 8 L21 19 Z"/><path d="M3 19 L21 19"/>') },
+  { id:'talent_fruit', name:'光明果的庇护', desc:'使用「光明果」赢下一局。', icon: svgIcon('<circle cx="12" cy="12" r="7"/><path d="M12 5 L12 2"/><path d="M12 22 L12 19"/><path d="M5 12 L2 12"/><path d="M22 12 L19 12"/>') },
+  { id:'talent_horse', name:'焚真之火', desc:'使用「焚真之火」赢下一局。', icon: svgIcon('<path d="M6 21 L6 15 Q6 11 9 9 L11 6 L13 4 L15 6 L17 6 L18 9 L15 10 L15 13 Q17 15 17 21"/><circle cx="14" cy="7" r="0.7"/>') },
+  { id:'talent_witness', name:'沉默的见证', desc:'使用「见证人」赢下一局。', icon: svgIcon('<path d="M3 12 Q12 5 21 12 Q12 19 3 12 Z"/><circle cx="12" cy="12" r="2.5"/><path d="M12 12 L18 8"/>') },
+  { id:'talent_chandler', name:'金色承诺', desc:'使用「制烛人」赢下一局。', icon: svgIcon('<path d="M12 2 L12 20"/><path d="M8 6 Q8 4 12 4 Q16 4 16 6 L16 8 Q16 10 12 10 Q8 10 8 8 Z"/><path d="M10 20 L14 20"/>') },
+  { id:'talent_sevenCoils', name:'七蟠之噬', desc:'使用「七蟠」赢下一局。', icon: svgIcon('<path d="M4 12 Q4 4 12 4 Q20 4 20 12 Q20 20 12 20 Q6 20 6 14"/>') },
+  { id:'talent_wheel', name:'转轮不息', desc:'使用「转轮」赢下一局。', icon: svgIcon('<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>') },
+  { id:'talent_flint', name:'燧石之痕', desc:'使用「燧石」赢下一局。', icon: svgIcon('<path d="M12 2 L16 8 L14 12 L18 18 L12 22 L6 18 L10 12 L8 8 Z"/>') },
+  { id:'talent_tide', name:'浪潮之息', desc:'使用「浪潮」赢下一局。', icon: svgIcon('<path d="M2 12 Q6 8 10 12 Q14 16 18 12 Q20 10 22 12"/><path d="M2 16 Q6 12 10 16 Q14 20 18 16"/>') },
+  { id:'talent_egg', name:'逆孵之光', desc:'使用「逆孵之卵」赢下一局。', icon: svgIcon('<ellipse cx="12" cy="12" rx="7" ry="9"/>') },
+  { id:'talent_brightSun', name:'骄阳之陨', desc:'使用「骄阳」赢下一局。', icon: svgIcon('<circle cx="12" cy="12" r="6"/><path d="M12 2 L12 5 M12 19 L12 22 M2 12 L5 12 M19 12 L22 12"/>') },
+  { id:'boss_exile', name:'放逐之影', desc:'击败流亡者。', icon: svgIcon('<path d="M5 21 L5 3 L15 3 L15 21"/><path d="M15 21 L19 21 L19 9 L15 9"/>') },
+  { id:'boss_daymare', name:'伯爵夫人的青睐', desc:'击败访客日魇。', icon: svgIcon('<path d="M12 21 L12 14"/><path d="M12 14 Q7 12 7 8 Q7 4 12 4 Q17 4 17 8 Q17 12 12 14 Z"/>') },
+  { id:'boss_azita', name:'棋逢对手', desc:'击败阿齐塔·布哈拉女士。', icon: svgIcon('<path d="M4 20 L20 4"/><path d="M4 4 L20 20"/><circle cx="12" cy="12" r="4"/>') },
+  { id:'boss_ehsan', name:'医者不自医', desc:'在埃桑触发自我治疗后，仍然击败他。', icon: svgIcon('<path d="M8 8 Q8 4 12 4 Q16 4 16 8 L16 16 Q16 20 12 20 Q8 20 8 16 Z"/><path d="M12 8 L12 16"/><path d="M8 12 L16 12"/>') },
+  { id:'hidden_zero', name:'归于虚无', desc:'使用「隐而不显」，将对手点数归零。', hidden:true, icon: svgIcon('<circle cx="12" cy="12" r="8"/><path d="M6.5 6.5 L17.5 17.5"/>') },
+  { id:'seven_coils_slain', name:'七步斩七蟠', desc:'使用「上校」，与对手同为 21 点时判胜。', hidden:true, icon: svgIcon('<path d="M3 21 L21 3"/><circle cx="12" cy="12" r="4"/>') },
+  { id:'intercalary', name:'置闰不再', desc:'使用「骄阳」在 Boss 战中获胜。', hidden:true, icon: svgIcon('<circle cx="12" cy="12" r="5"/><path d="M12 2 L12 4 M12 20 L12 22"/>') },
+  { id:'skill_force', name:'你被骗了', desc:'怎么会有这么超模的东西呢', hidden:true, icon: svgIcon('<circle cx="12" cy="12" r="8"/><path d="M8 12 L16 12"/>') },
+  { id:'skill_sharp_exile', name:'不可切碎之物', desc:'对流亡者使用「锋锐」，刀刃卷曲。', hidden:true, icon: svgIcon('<path d="M4 20 L12 12"/><path d="M12 12 L20 4"/>') },
+  { id:'enemy_force_seen', name:'彼之敕令', desc:'亲眼目睹对手使用「武力之敕令」。', hidden:true, icon: svgIcon('<circle cx="12" cy="12" r="8"/><path d="M8 12 L16 12"/><path d="M12 8 L12 16"/>') },
+  { id:'enemy_sharp_hit', name:'切肤之痛', desc:'被对手的「锋锐」切碎一张手牌。', hidden:true, icon: svgIcon('<path d="M4 20 L12 12"/><path d="M12 12 L20 4"/><path d="M8 16 L12 20"/>') },
+  { id:'tide_kettle', name:'潮汐与壶', desc:'在「浪潮」天赋下让「水壶」生效——潮水被装进壶中，涨落归于平静。', hidden:true, icon: svgIcon('<path d="M8 8 Q6 12 8 16 Q10 20 12 20 Q14 20 16 16 Q18 12 16 8"/><path d="M6 6 L18 6"/><path d="M2 14 Q5 12 8 14 Q11 16 14 14 Q17 12 20 14"/>') },
+  { id:'root_crown_victory', name:'根冠的胜利', desc:'分别使用「焚真之火」「无伤之夜」「受施之默」各赢下一局。', icon: svgIcon('<circle cx="12" cy="12" r="3"/><path d="M12 3 L12 6"/><path d="M12 18 L12 21"/><path d="M3 12 L6 12"/><path d="M18 12 L21 12"/><path d="M5 5 L7 7"/><path d="M17 17 L19 19"/><path d="M19 5 L17 7"/><path d="M7 17 L5 19"/>') },
+  { id:'skill_resurgence', name:'向死而生', desc:'使用「复苏与羽化」时，弃掉的那张牌点数，恰好等于新抽两张牌的点数之和。', icon: svgIcon('<path d="M12 2 Q6 6 6 12 Q6 18 12 22"/><path d="M12 2 Q18 6 18 12 Q18 18 12 22"/>') },
+  { id:'skill_stitching', name:'完美缝合', desc:'「缝合与装订」抵消了一次负面修正，且你本局最终点数恰好为 21。', icon: svgIcon('<path d="M4 20 L12 12 L20 4"/><path d="M8 4 L12 8 L16 4"/><path d="M8 20 L12 16 L16 20"/>') },
+  { id:'skill_orchids', name:'花之诱', desc:'使用「兰花与迷药」改变对手花色后，对手本局最终爆牌。', icon: svgIcon('<path d="M12 21 L12 14"/><path d="M12 14 Q7 12 7 8 Q7 4 12 4 Q17 4 17 8 Q17 12 12 14 Z"/>') },
+  { id:'skill_sights', name:'预见终局', desc:'使用「景象与感知」保留的那张牌，是你手牌中的最后一张，且你本局最终点数恰好为 21。', icon: svgIcon('<path d="M3 12 Q12 5 21 12 Q12 19 3 12 Z"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2 L12 6"/>') },
+  { id:'skill_insects', name:'蜜之双生', desc:'使用「昆虫与花蜜」抽到的牌，与对手上一张牌点数完全相同。', icon: svgIcon('<path d="M12 2 Q16 6 16 12 Q16 18 12 22 Q8 18 8 12 Q8 6 12 2 Z"/><path d="M12 8 L12 16"/>') },
+  { id:'skill_lens', name:'聚焦之痛', desc:'使用「蒂尔黛透镜」让对手弃牌的同一局中，对手最终爆牌。', icon: svgIcon('<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/><path d="M12 2 L12 5 M12 19 L12 22 M2 12 L5 12 M19 12 L22 12"/>') },
+  { id:'skill_thunderstruck', name:'二十二点的风暴', desc:'「襁褓雷霆」生效期间，你以恰好 22 点获胜。', icon: svgIcon('<path d="M13 2 L6 14 L11 14 L9 22 L18 10 L13 10 Z"/>') },
+  { id:'skill_timeharp', name:'回溯之胜', desc:'使用「时键琴」撤销操作后，你最终赢下这一局。', icon: svgIcon('<circle cx="12" cy="12" r="8"/><path d="M12 6 L12 12 L16 14"/>') },
+  { id:'skill_bronze', name:'切碎命运', desc:'使用「青铜刀」切碎的 3 张牌中，至少有一张是 A。', icon: svgIcon('<path d="M4 20 L16 8"/><path d="M16 8 L20 4"/>') },
+  { id:'skill_all_used', name:'万艺归一', desc:'使用过全部 19 种技艺卡牌——所有技法，如今都已在你指尖。', icon: svgIcon('<circle cx="12" cy="12" r="9"/><path d="M12 3 L12 21"/><path d="M3 12 L21 12"/><path d="M5.6 5.6 L18.4 18.4"/><path d="M18.4 5.6 L5.6 18.4"/>') },
+  { id:'all_achievements', name:'司辰之书', desc:'解锁 65 个其他成就，完成全书。', ultimate:true, icon: svgIcon('<path d="M4 4 Q4 12 4 20 Q12 22 20 20 Q20 12 20 4 Q12 2 4 4 Z"/><path d="M8 8 L8 16 M12 8 L12 16 M16 8 L16 16"/>') },
+];
+
+const ACH_BY_ID = {};
+for (const a of ACHIEVEMENTS) ACH_BY_ID[a.id] = a;
+
+const save = {
+  unlocked: {}, introSeen: false, ancientUnlocked: false,
+  stats: {
+    wins:0,losses:0,pushes:0,blackjacks:0,busts:0,rounds:0,
+    winStreak:0,bestStreak:0,maxChips:START_CHIPS,totalProfit:0,
+    talentWins:{}, bossWins:{ exile:0, daymare:0, azita:0, ehsan:0 },
+    skillsUsed: {},
+  },
+  pendingSevenCoilsBonus: 0,
+};
+
+function loadSave() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    let data;
+    try {
+      data = JSON.parse(raw);
+    } catch (parseErr) {
+      try { localStorage.setItem(STORAGE_KEY + '_corrupt_backup', raw); } catch(e){}
+      console.error('存档解析失败，已备份到 ' + STORAGE_KEY + '_corrupt_backup');
+      return;
+    }
+    if (data.unlocked && typeof data.unlocked==='object') save.unlocked = data.unlocked;
+    if (typeof data.introSeen==='boolean') save.introSeen = data.introSeen;
+    if (typeof data.ancientUnlocked==='boolean') save.ancientUnlocked = data.ancientUnlocked;
+    if (typeof data.pendingSevenCoilsBonus==='number') save.pendingSevenCoilsBonus = data.pendingSevenCoilsBonus;
+    const d = data.stats;
+    if (d) {
+      for (const k of ['wins','losses','pushes','blackjacks','busts','rounds','winStreak','bestStreak','maxChips','totalProfit']) {
+        if (typeof d[k]==='number') save.stats[k] = d[k];
+      }
+      if (d.talentWins && typeof d.talentWins==='object') save.stats.talentWins = d.talentWins;
+      if (d.bossWins && typeof d.bossWins==='object') {
+        save.stats.bossWins = { exile:d.bossWins.exile||0, daymare:d.bossWins.daymare||0, azita:d.bossWins.azita||0, ehsan:d.bossWins.ehsan||0 };
+      }
+      if (d.skillsUsed && typeof d.skillsUsed==='object') save.stats.skillsUsed = d.skillsUsed;
+    }
+  } catch(e){}
+}
+function persist() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(save)); } catch(e){} }
+
+function unlock(id) {
+  if (save.unlocked[id]) return;
+  save.unlocked[id] = Date.now();
+  SFX.achievement();
+  persist();
+  const a = ACH_BY_ID[id];
+  if (a) showToast(a);
+  renderAchievements();
+  renderTitleStats();
+  checkAncientAndUltimate();
+}
+
+function showToast(a) {
+  const box = document.getElementById('toastBox');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<div class="toast-icon">${a.icon}</div><div class="toast-body"><div class="toast-label">成 就 解 锁</div><div class="toast-name">${a.name}</div><div class="toast-desc">${a.desc}</div></div>`;
+  box.appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(()=>t.remove(),400); }, 2800);
+}
+
+function achievementCountForUnlock() { return Object.keys(save.unlocked).filter(id => id !== 'all_achievements').length; }
+
+function checkAncientAndUltimate() {
+  if (!save.ancientUnlocked && achievementCountForUnlock() >= 10) {
+    save.ancientUnlocked = true;
+    persist();
+    openSpecialModal('ancient');
+    return;
+  }
+  if (!save.unlocked['all_achievements'] && achievementCountForUnlock() >= ULTIMATE_REQUIRED) {
+    save.unlocked['all_achievements'] = Date.now();
+    SFX.achievement();
+    persist();
+    renderAchievements();
+    renderTitleStats();
+    openSpecialModal('ultimate');
+  }
+}
+
+function openSpecialModal(kind) {
+  const overlay = document.getElementById('specialModal');
+  const box = document.getElementById('specialModalBox');
+  const title = document.getElementById('specialModalTitle');
+  const big = document.getElementById('specialModalBig');
+  const desc = document.getElementById('specialModalDesc');
+  const list = document.getElementById('specialModalList');
+  box.classList.remove('gold');
+  if (kind === 'ancient') {
+    title.textContent = '远 古 的 注 视';
+    big.textContent = '司辰之池扩展';
+    desc.textContent = '你已获得十个成就。七位远古的司辰在暗处睁开眼睛，加入牌桌的注视。';
+    list.innerHTML = '<b>七蟠</b> · <b>转轮</b> · <b>燧石</b> · <b>浪潮</b> · <b>逆孵之卵</b> · <b>骄阳</b><br>已加入随机抽取池。';
+  } else {
+    box.classList.add('gold');
+    title.textContent = '全 书 已 成';
+    big.textContent = '司 辰 之 书';
+    desc.textContent = '你解开了这本书记载的绝大部分秘密。司辰的法则，如今大多在你的指尖。';
+    list.innerHTML = '<b>终极成就 · 司辰之书</b>';
+  }
+  overlay.classList.add('show');
+}
+function closeSpecialModal() { document.getElementById('specialModal').classList.remove('show'); }
+
+function checkAchievements(ctx) {
+  const s = save.stats;
+  if (s.wins >= 1) unlock('first_blood');
+  if (s.blackjacks >= 1) unlock('blackjack_1');
+  if (s.blackjacks >= 5) unlock('blackjack_5');
+  if (s.bestStreak >= 3) unlock('streak_3');
+  if (s.maxChips >= 500) unlock('chips_500');
+  if (s.busts >= 5) unlock('bust_5');
+  if (s.rounds >= 20) unlock('rounds_20');
+  if (ctx.result === 'win') {
+    for (const t of ctx.talents) {
+      const key = 'talent_' + t;
+      if (ACH_BY_ID[key]) unlock(key);
+    }
+  }
+  if (ctx.flags.hiddenZero) unlock('hidden_zero');
+  if (ctx.flags.sevenCoilsSlain) unlock('seven_coils_slain');
+  if (ctx.flags.intercalary) unlock('intercalary');
+  if (BASE_TALENT_IDS.every(t => (s.talentWins[t] || 0) > 0)) unlock('all_talents');
+
+  if ((s.talentWins['horse'] || 0) > 0 &&
+      (s.talentWins['velvet'] || 0) > 0 &&
+      (s.talentWins['dawn'] || 0) > 0) {
+    unlock('root_crown_victory');
+  }
+
+  checkAncientAndUltimate();
+}
+/* ================= 特效 ================= */
+const fx = { canvas:document.getElementById('fxCanvas'), banner:document.getElementById('fxBanner'), tableEl:document.getElementById('tableEl'), ctx:null, particles:[], running:false, dpr:1 };
+function initFx(){ fx.ctx=fx.canvas.getContext('2d'); resizeFx(); window.addEventListener('resize', resizeFx); window.addEventListener('orientationchange', ()=>setTimeout(resizeFx,120)); }
+function resizeFx(){ fx.dpr=window.devicePixelRatio||1; fx.canvas.width=window.innerWidth*fx.dpr; fx.canvas.height=window.innerHeight*fx.dpr; fx.canvas.style.width=window.innerWidth+'px'; fx.canvas.style.height=window.innerHeight+'px'; fx.ctx.setTransform(fx.dpr,0,0,fx.dpr,0,0); }
+function drawStar(ctx,x,y,r){ ctx.beginPath(); for(let i=0;i<5;i++){const a=-Math.PI/2+i*Math.PI*2/5; const a2=a+Math.PI/5; ctx.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r); ctx.lineTo(x+Math.cos(a2)*r*0.42,y+Math.sin(a2)*r*0.42);} ctx.closePath(); ctx.fill(); }
+function isSmallScreen(){ return window.innerWidth<=640; }
+function spawnWinBurst(cx,cy){ const colors=['#c9a227','#e8cf6b','#f7ecb8','#a8851b','#fffbe6']; const n=isSmallScreen()?85:130; for(let i=0;i<n;i++){const ang=Math.random()*Math.PI*2; const spd=2+Math.random()*10; fx.particles.push({x:cx+(Math.random()-.5)*60,y:cy+(Math.random()-.5)*40,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd-2.2,life:0,maxLife:55+Math.random()*75,size:1.6+Math.random()*3.2,color:colors[(Math.random()*colors.length)|0],gravity:0.09,drag:0.982,twinkle:Math.random()*Math.PI*2,shape:Math.random()<.32?'star':'circle'});} }
+function spawnLoseEmbers(){ const colors=['#7a2b26','#a83b34','#4a2222','#3a3f4a','#8a2b2b']; const n=isSmallScreen()?62:95; for(let i=0;i<n;i++){fx.particles.push({x:Math.random()*window.innerWidth,y:-20-Math.random()*260,vx:(Math.random()-.5)*1.4,vy:1.2+Math.random()*3.6,life:0,maxLife:90+Math.random()*90,size:1.1+Math.random()*2.8,color:colors[(Math.random()*colors.length)|0],gravity:0.025,drag:1,twinkle:Math.random()*Math.PI*2,shape:'circle'});} }
+function spawnPushDust(){ const colors=['#8d94a3','#a4abb9','#c9a227']; const n=isSmallScreen()?30:42; for(let i=0;i<n;i++){fx.particles.push({x:window.innerWidth/2+(Math.random()-.5)*220,y:window.innerHeight*.45+(Math.random()-.5)*90,vx:(Math.random()-.5)*1.6,vy:-.6-Math.random()*1.4,life:0,maxLife:60+Math.random()*60,size:1+Math.random()*2.2,color:colors[(Math.random()*colors.length)|0],gravity:-.004,drag:.995,twinkle:Math.random()*Math.PI*2,shape:'circle'});} }
+
+const BOSS_PALETTES = {
+  exile:   ['#8a1a1a', '#d1524a', '#ff6b5e', '#5a1a1a'],
+  daymare: ['#4a2e78', '#8a5ac9', '#c4a6f0', '#e8cf6b'],
+  azita:   ['#1a3a5c', '#2c5282', '#9acd32', '#b8e04a'],
+  ehsan:   ['#1a3a5c', '#2c5282', '#fa8072', '#ff9d8a'],
+};
+
+let bossAmbientTimer = null;
+function startBossAmbient(type) {
+  stopBossAmbient();
+  if (!BOSS_PALETTES[type]) return;
+  const palette = BOSS_PALETTES[type];
+  bossAmbientTimer = setInterval(() => {
+    if (!state.boss.active || state.boss.type !== type) { stopBossAmbient(); return; }
+    const W = window.innerWidth, H = window.innerHeight;
+    if (type === 'exile') {
+      if (Math.random() < 0.9) {
+        fx.particles.push({
+          x: Math.random() * W, y: H + 10,
+          vx: (Math.random() - 0.5) * 0.6, vy: -0.8 - Math.random() * 1.8,
+          life: 0, maxLife: 120 + Math.random() * 80,
+          size: 1.5 + Math.random() * 2.4,
+          color: palette[(Math.random() * palette.length) | 0],
+          gravity: -0.003, drag: 0.998,
+          twinkle: Math.random() * Math.PI * 2, shape: 'circle',
+        });
+      }
+    } else if (type === 'daymare') {
+      if (Math.random() < 0.85) {
+        fx.particles.push({
+          x: Math.random() * W, y: H * 0.8 + Math.random() * H * 0.2,
+          vx: (Math.random() - 0.5) * 0.4, vy: -0.4 - Math.random() * 1.2,
+          life: 0, maxLife: 140 + Math.random() * 80,
+          size: 1.8 + Math.random() * 3,
+          color: Math.random() < 0.75 ? palette[1] : palette[3],
+          gravity: -0.002, drag: 0.999,
+          twinkle: Math.random() * Math.PI * 2, shape: 'circle',
+        });
+      }
+    } else if (type === 'azita') {
+      if (Math.random() < 0.7) {
+        fx.particles.push({
+          x: Math.random() * W, y: H + 10,
+          vx: (Math.random() - 0.5) * 0.5, vy: -0.7 - Math.random() * 1.4,
+          life: 0, maxLife: 130 + Math.random() * 70,
+          size: 2 + Math.random() * 2.4,
+          color: palette[(Math.random() * palette.length) | 0],
+          gravity: -0.003, drag: 0.999,
+          twinkle: Math.random() * Math.PI * 2, shape: 'star',
+        });
+      }
+    } else if (type === 'ehsan') {
+      if (Math.random() < 0.8) {
+        fx.particles.push({
+          x: Math.random() * W, y: H + 10,
+          vx: (Math.random() - 0.5) * 0.8, vy: -0.6 - Math.random() * 1.6,
+          life: 0, maxLife: 110 + Math.random() * 80,
+          size: 2 + Math.random() * 3,
+          color: palette[(Math.random() * palette.length) | 0],
+          gravity: -0.005, drag: 0.997,
+          twinkle: Math.random() * Math.PI * 2, shape: 'circle',
+        });
+      }
+    }
+    startFxLoop();
+  }, 700);
+}
+function stopBossAmbient() {
+  if (bossAmbientTimer) { clearInterval(bossAmbientTimer); bossAmbientTimer = null; }
+}
+
+function playBossIntro(type) {
+  const palette = BOSS_PALETTES[type];
+  if (!palette) return;
+  const W = window.innerWidth, H = window.innerHeight;
+  for (let i = 0; i < 80; i++) {
+    const ang = -Math.PI / 2 + (Math.random() - 0.5) * 0.8;
+    const spd = 3 + Math.random() * 8;
+    fx.particles.push({
+      x: W / 2 + (Math.random() - 0.5) * W * 0.7,
+      y: H + 30,
+      vx: Math.cos(ang) * spd * 0.4,
+      vy: Math.sin(ang) * spd - 3,
+      life: 0, maxLife: 90 + Math.random() * 90,
+      size: 2 + Math.random() * 4,
+      color: palette[(Math.random() * palette.length) | 0],
+      gravity: 0.04, drag: 0.985,
+      twinkle: Math.random() * Math.PI * 2,
+      shape: Math.random() < 0.4 ? 'star' : 'circle',
+    });
+  }
+  startFxLoop();
+  const table = fx.tableEl;
+  table.classList.remove('flash-win', 'flash-lose');
+  void table.offsetWidth;
+  table.style.animation = 'bossIntroFlash 1.6s ease-out';
+  setTimeout(() => { table.style.animation = ''; }, 1700);
+}
+
+function playBossAbilityEffect(type, anchorEl) {
+  const palette = BOSS_PALETTES[type];
+  if (!palette) return;
+  let cx = window.innerWidth / 2, cy = window.innerHeight * 0.42;
+  if (anchorEl) {
+    const r = anchorEl.getBoundingClientRect();
+    cx = r.left + r.width / 2;
+    cy = r.top + r.height / 2;
+  }
+  for (let i = 0; i < 35; i++) {
+    const ang = Math.random() * Math.PI * 2;
+    const spd = 1 + Math.random() * 4;
+    fx.particles.push({
+      x: cx + (Math.random() - 0.5) * 50,
+      y: cy + (Math.random() - 0.5) * 30,
+      vx: Math.cos(ang) * spd,
+      vy: Math.sin(ang) * spd - 1,
+      life: 0, maxLife: 45 + Math.random() * 45,
+      size: 2 + Math.random() * 3,
+      color: palette[(Math.random() * palette.length) | 0],
+      gravity: 0.06, drag: 0.97,
+      twinkle: Math.random() * Math.PI * 2,
+      shape: Math.random() < 0.4 ? 'star' : 'circle',
+    });
+  }
+  startFxLoop();
+}
+
+function playPrescriptionEffect() {
+  const r = el.dealerCards.getBoundingClientRect();
+  const cx = r.left + r.width / 2;
+  const cy = r.top + r.height / 2;
+  const palette = BOSS_PALETTES.ehsan;
+  for (let i = 0; i < 28; i++) {
+    const ang = Math.random() * Math.PI * 2;
+    const spd = 1 + Math.random() * 3.5;
+    fx.particles.push({
+      x: cx + (Math.random() - 0.5) * 40, y: cy,
+      vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd + 0.5,
+      life: 0, maxLife: 60 + Math.random() * 40,
+      size: 2.5 + Math.random() * 2.5,
+      color: palette[(Math.random() * palette.length) | 0],
+      gravity: 0.08, drag: 0.97,
+      twinkle: Math.random() * Math.PI * 2, shape: 'circle',
+    });
+  }
+  startFxLoop();
+}
+
+function fxLoop(){ if(!fx.running)return; const ctx=fx.ctx; const W=window.innerWidth,H=window.innerHeight; ctx.clearRect(0,0,W,H); let alive=0; for(const p of fx.particles){ if(p.life>=p.maxLife)continue; alive++; p.life++; p.vx*=p.drag; p.vy=p.vy*p.drag+p.gravity; p.x+=p.vx; p.y+=p.vy; const t=p.life/p.maxLife; let alpha=1-t; if(t<.12)alpha=t/.12; alpha*=.75+.25*Math.sin(p.life*.28+(p.twinkle||0)); ctx.globalAlpha=Math.max(0,Math.min(1,alpha)); ctx.fillStyle=p.color; if(p.shape==='star')drawStar(ctx,p.x,p.y,p.size*1.7); else{ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();} } ctx.globalAlpha=1; fx.particles=fx.particles.filter(p=>p.life<p.maxLife&&p.y<H+80&&p.x>-120&&p.x<W+120); if(alive>0)requestAnimationFrame(fxLoop); else{fx.running=false;ctx.clearRect(0,0,W,H);} }
+function startFxLoop(){ if(fx.running)return; fx.running=true; requestAnimationFrame(fxLoop); }
+function flashTable(kind){ const t=fx.tableEl; t.classList.remove('flash-win','flash-lose'); void t.offsetWidth; t.classList.add(kind==='win'?'flash-win':'flash-lose'); setTimeout(()=>t.classList.remove('flash-win','flash-lose'),1100); }
+function glowCards(kind){ const cls=kind==='win'?'glow-win':'glow-lose'; const nodes=[...document.querySelectorAll('#playerCards .card'),...document.querySelectorAll('#dealerCards .card')]; nodes.forEach((n,i)=>{n.classList.remove('glow-win','glow-lose'); void n.offsetWidth; setTimeout(()=>{n.classList.add(cls); setTimeout(()=>n.classList.remove(cls),1200);},i*45);}); }
+function shakeScreen(){ document.body.classList.remove('shake'); void document.body.offsetWidth; document.body.classList.add('shake'); setTimeout(()=>document.body.classList.remove('shake'),620); }
+function showBanner(text,kind){ const b=fx.banner; b.className='fx-banner'; b.textContent=text; void b.offsetWidth; b.classList.add(kind,'show'); }
+function playResultEffect(result){
+  const cx=window.innerWidth/2, cy=window.innerHeight*0.42;
+  if(result==='win'){ showBanner('胜 利','win'); spawnWinBurst(cx,cy); setTimeout(()=>spawnWinBurst(cx,cy),220); setTimeout(()=>spawnWinBurst(cx,window.innerHeight*0.55),480); flashTable('win'); glowCards('win'); startFxLoop(); }
+  else if(result==='lose'){ showBanner('失 败','lose'); spawnLoseEmbers(); flashTable('lose'); glowCards('lose'); shakeScreen(); startFxLoop(); }
+  else{ showBanner('平 局','push'); spawnPushDust(); startFxLoop(); }
+}
+
+/* ================= 游戏状态 ================= */
+const state = {
+  chips: START_CHIPS, bet: 0,
+  deck: shuffle(newDeck()), player: [], dealer: [],
+  phase: 'title', hideHole: true, busy: false,
+  talents: new Set(),
+  finalP: null, finalD: null, roundFlags: {},
+  normalRounds: 0, bossIndex: 0,
+  boss: { active:false, type:null, playerBonus:0, dealerBonus:0, triggerCount:0, consulFee:0, roseTip:0, holeRevealed:false, azitaCheckUsed:false, azitaCheckFee:0, ehsanHealed:false, ehsanHealOffset:0, ehsanPrescriptionGiven:false, ehsanPrescriptions:0 },
+  talentState: {
+    dawnBonus: 0, axeUsed:false, motherUsed:false, travelerUsed:false, forgeUsed:false, fruitUsed:false,
+    snowUsed:false, velvetHidden:false, doorPeeked:false, crowRedrawn:false, yewExtra:false, moonSwapped:false,
+    witnessUsed:false, eggUsed:false, flintUsed:false,
+  },
+  skillBonus: { player:0, dealer:0 },
+  skillFlags: {
+    playerGlass:false, playerBell:false, playerKettle:false, playerForce:false, playerSharp:false,
+    dealerGlass:false, dealerBell:false, dealerKettle:false, dealerForce:false, dealerSharp:false,
+    stringsActive:false, stitchActive:false, thunderActive:false, timeHarpUsed:false, lensUsed:false, bronzeUsed:false,
+    songBenefits: 0, orchidChanged: false, lensHit: false, timeharpUsedThisRound: false, sightsKeptCardId: null,
+  },
+  playerSkillUsed: false,
+  dealerSkillUsed: false,
+  azitaLayoutDone: false,
+  lastAction: null,
+  lastPlayerScore: null,
+  lastDealerScore: null,
+};
+
+const el = {
+  titleScreen:document.getElementById('titleScreen'), gameScreen:document.getElementById('gameScreen'),
+  titleStats:document.getElementById('titleStats'), btnStart:document.getElementById('btnStart'),
+  chips:document.getElementById('chips'), bet:document.getElementById('bet'), deckCount:document.getElementById('deckCount'),
+  dealerName:document.getElementById('dealerName'),
+  dealerCards:document.getElementById('dealerCards'), playerCards:document.getElementById('playerCards'),
+  dealerScore:document.getElementById('dealerScore'), playerScore:document.getElementById('playerScore'),
+  message:document.getElementById('message'), notes:document.getElementById('notes'),
+  talentBar:document.getElementById('talentBar'), bossBadge:document.getElementById('bossBadge'),
+  betPanel:document.getElementById('betPanel'), actionPanel:document.getElementById('actionPanel'),
+  btnHit:document.getElementById('btnHit'), btnStand:document.getElementById('btnStand'),
+  btnDouble:document.getElementById('btnDouble'), btnNext:document.getElementById('btnNext'),
+  storyOverlay:document.getElementById('storyOverlay'), storyText:document.getElementById('storyText'),
+  btnStoryNext:document.getElementById('btnStoryNext'), btnSkipStory:document.getElementById('btnSkipStory'),
+  talentOverlay:document.getElementById('talentOverlay'), talentGrid:document.getElementById('talentGrid'),
+  talentSub:document.getElementById('talentSub'),
+  skillOverlay:document.getElementById('skillOverlay'),
+  skillChoiceGrid:document.getElementById('skillChoiceGrid'),
+  btnSkillSkip:document.getElementById('btnSkillSkip'),
+  achievementOverlay:document.getElementById('achievementOverlay'), achGrid:document.getElementById('achGrid'),
+  achProgress:document.getElementById('achProgress'), rulesOverlay:document.getElementById('rulesOverlay'),
+  statsOverlay:document.getElementById('statsOverlay'),
+  bossChoiceOverlay:document.getElementById('bossChoiceOverlay'), bossChoiceBox:document.getElementById('bossChoiceBox'),
+  bossChoiceName:document.getElementById('bossChoiceName'), bossChoiceDesc:document.getElementById('bossChoiceDesc'),
+  btnStartBoss:document.getElementById('btnStartBoss'), btnSkipBoss:document.getElementById('btnSkipBoss'),
+  bankruptOverlay:document.getElementById('bankruptOverlay'),
+  tableEl:document.getElementById('tableEl'),
+};
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+function setMessage(t) { el.message.textContent = t; }
+
+/* ================= 渲染 ================= */
+function makeCardEl(card, faceDown) {
+  const d = document.createElement('div');
+  d.className = 'card';
+  if (faceDown) { d.classList.add('back'); return d; }
+  d.classList.add(card.suit.color === 'red' ? 'red' : 'black');
+  if (card.modified) d.classList.add('modified');
+  if (card.isPrescription) d.classList.add('prescription');
+  d.innerHTML = `<span class="corner">${card.rank}<br>${card.suit.sym}</span><span class="big">${card.suit.sym}</span><span class="corner bottom">${card.rank}<br>${card.suit.sym}</span>`;
+  if (card.mechanism) { d.classList.add('mech'); const m=MECHANISMS[card.mechanism]; if(m&&m.name) d.title=m.name; }
+  return d;
+}
+function renderCards(container, cards, hideIndex) {
+  while (container.children.length > cards.length) container.removeChild(container.lastChild);
+  for (let i=0;i<cards.length;i++) {
+    const card = cards[i];
+    const hide = (hideIndex === i);
+    const key = card.id + (hide ? ':b' : ':f') + (card.modified ? ':m' : '') + (card.isPrescription ? ':p' : '');
+    let node = container.children[i];
+    if (!node || node.dataset.key !== key) {
+      const fresh = makeCardEl(card, hide);
+      fresh.dataset.key = key;
+      if (node) container.replaceChild(fresh, node); else container.appendChild(fresh);
+    }
+  }
+}
+function scoreText(hand, cards, threshold) {
+  if (!cards.length) return '—';
+  const v = hand.value;
+  const t = typeof threshold === 'number' ? threshold : 21;
+  if (v > t) return v + ' 爆牌';
+  return hand.soft ? v + '（软）' : String(v);
+}
+function renderTalents() {
+  const badge = el.bossBadge;
+  el.talentBar.innerHTML = '';
+  el.talentBar.appendChild(badge);
+  for (const id of state.talents) {
+    const t = TALENTS[id]; if (!t) continue;
+    const span = document.createElement('span');
+    span.className = 'talent-chip' + (t.ancient ? ' ancient' : '');
+    span.textContent = t.name;
+    span.title = t.desc;
+    el.talentBar.appendChild(span);
+  }
+}
+function render() {
+  el.chips.textContent = state.chips;
+  el.bet.textContent = state.bet;
+  el.deckCount.textContent = state.deck.length;
+
+  el.tableEl.classList.remove('boss-exile', 'boss-daymare', 'boss-azita', 'boss-ehsan');
+  if (state.boss.active) el.tableEl.classList.add('boss-' + state.boss.type);
+
+  if (state.boss.active) {
+    const names = {exile:'流亡者', daymare:'访客日魇', azita:'阿齐塔', ehsan:'埃桑'};
+    el.dealerName.textContent = names[state.boss.type] || '霍科博尔德';
+  } else {
+    el.dealerName.textContent = '霍科博尔德';
+  }
+
+  if (state.boss.active) {
+    el.bossBadge.style.display = 'inline-block';
+    const badgeMap = {
+      exile: { cls: 'boss-badge', text: 'Boss · 流亡者' },
+      daymare: { cls: 'boss-badge daymare', text: 'Boss · 访客日魇' },
+      azita: { cls: 'boss-badge azita', text: 'Boss · 阿齐塔' },
+      ehsan: { cls: 'boss-badge ehsan', text: 'Boss · 埃桑' },
+    };
+    const m = badgeMap[state.boss.type] || badgeMap.exile;
+    el.bossBadge.className = m.cls;
+    el.bossBadge.textContent = m.text;
+  } else el.bossBadge.style.display = 'none';
+
+  const forceHide = state.talentState.velvetHidden;
+  const concealDealer = (state.hideHole || forceHide) && state.phase !== 'settled';
+  let hideIdx = -1;
+  if (concealDealer && state.dealer.length >= 2) hideIdx = 1;
+  renderCards(el.dealerCards, state.dealer, hideIdx);
+
+  if (!state.dealer.length) { el.dealerScore.textContent = '—'; el.dealerScore.classList.remove('bust'); }
+  else if (concealDealer) {
+    const visible = hideIdx >= 0 ? state.dealer.slice(0, hideIdx) : state.dealer.slice();
+    const hv = handValue(visible);
+    el.dealerScore.textContent = hv.value + ' + ?';
+    el.dealerScore.classList.remove('bust');
+  } else if (state.phase === 'settled' && state.finalD !== null) {
+    el.dealerScore.textContent = String(state.finalD);
+    el.dealerScore.classList.toggle('bust', state.finalD > 21);
+  } else {
+    const h = dealerHandValue();
+    el.dealerScore.textContent = scoreText(h, state.dealer, 21);
+    el.dealerScore.classList.toggle('bust', h.value > 21);
+  }
+
+  renderCards(el.playerCards, state.player, -1);
+  if (state.phase === 'settled' && state.finalP !== null) {
+    el.playerScore.textContent = String(state.finalP);
+    el.playerScore.classList.toggle('bust', state.finalP > playerBustThreshold());
+  } else {
+    const ph = playerHandValue();
+    const pThreshold = playerBustThreshold();
+    el.playerScore.textContent = scoreText(ph, state.player, pThreshold);
+    el.playerScore.classList.toggle('bust', state.player.length > 0 && ph.value > pThreshold);
+  }
+
+  const pv = state.player.length ? playerHandValue().value : null;
+  const dv = state.dealer.length ? dealerHandValue().value : null;
+  if (pv !== null && pv !== state.lastPlayerScore) {
+    el.playerScore.classList.remove('score-pop');
+    void el.playerScore.offsetWidth;
+    el.playerScore.classList.add('score-pop');
+    state.lastPlayerScore = pv;
+  } else if (pv === null) state.lastPlayerScore = null;
+  if (dv !== null && dv !== state.lastDealerScore) {
+    el.dealerScore.classList.remove('score-pop');
+    void el.dealerScore.offsetWidth;
+    el.dealerScore.classList.add('score-pop');
+    state.lastDealerScore = dv;
+  } else if (dv === null) state.lastDealerScore = null;
+
+  const isBetting = state.phase === 'betting';
+  const isPlayerTurn = state.phase === 'playerTurn';
+  const isSettled = state.phase === 'settled';
+
+  el.betPanel.style.display = isBetting ? 'flex' : 'none';
+  el.actionPanel.style.display = (isPlayerTurn || isSettled) ? 'flex' : 'none';
+
+  for (const b of el.betPanel.querySelectorAll('.btn')) {
+    const v = b.dataset.bet === 'all' ? state.chips : parseInt(b.dataset.bet, 10);
+    b.disabled = !isBetting || v > state.chips || v <= 0;
+  }
+
+  el.btnHit.style.display = isPlayerTurn ? '' : 'none';
+  el.btnHit.disabled = !isPlayerTurn;
+
+  el.btnStand.style.display = isPlayerTurn ? '' : 'none';
+  el.btnStand.disabled = !isPlayerTurn;
+
+  el.btnDouble.style.display = isPlayerTurn ? '' : 'none';
+  el.btnDouble.disabled = !isPlayerTurn || state.player.length !== 2 || state.chips < state.bet;
+
+  el.btnNext.style.display = isSettled ? '' : 'none';
+  el.btnNext.disabled = !isSettled;
+  el.btnNext.textContent = (isSettled && state.chips < 10) ? '重新开始 (N)' : '下一局 (N)';
+
+  let motherBtn = document.getElementById('btnMother');
+  if (!motherBtn) {
+    motherBtn = document.createElement('button');
+    motherBtn.id = 'btnMother';
+    motherBtn.className = 'btn';
+    motherBtn.textContent = '蚁母：弃牌重抽';
+    motherBtn.addEventListener('click', useMotherTalent);
+    el.actionPanel.appendChild(motherBtn);
+  }
+  const canUseMother = isPlayerTurn && hasTalent('mother') && !state.talentState.motherUsed && state.player.length > 0;
+  motherBtn.style.display = canUseMother ? '' : 'none';
+  motherBtn.disabled = !canUseMother;
+
+  let travelerBtn = document.getElementById('btnTraveler');
+  if (!travelerBtn) {
+    travelerBtn = document.createElement('button');
+    travelerBtn.id = 'btnTraveler';
+    travelerBtn.className = 'btn';
+    travelerBtn.textContent = '浪游旅人：与牌堆顶交换';
+    travelerBtn.addEventListener('click', useTravelerTalent);
+    el.actionPanel.appendChild(travelerBtn);
+  }
+  const canUseTraveler = isPlayerTurn && hasTalent('traveler') && !state.talentState.travelerUsed && state.player.length > 0 && state.deck.length > 0;
+  travelerBtn.style.display = canUseTraveler ? '' : 'none';
+  travelerBtn.disabled = !canUseTraveler;
+
+  let flintBtn = document.getElementById('btnFlint');
+  if (!flintBtn) {
+    flintBtn = document.createElement('button');
+    flintBtn.id = 'btnFlint';
+    flintBtn.className = 'btn';
+    flintBtn.textContent = '燧石：重置手牌点数';
+    flintBtn.addEventListener('click', useFlintTalent);
+    el.actionPanel.appendChild(flintBtn);
+  }
+  const canUseFlint = isPlayerTurn && hasTalent('flint') && !state.talentState.flintUsed && state.player.some(c => c.modified);
+  flintBtn.style.display = canUseFlint ? '' : 'none';
+  flintBtn.disabled = !canUseFlint;
+}
+function renderTitleStats() {
+  const s = save.stats, total = ACHIEVEMENTS.length, got = Object.keys(save.unlocked).length;
+  const profit = s.totalProfit || 0;
+  el.titleStats.innerHTML = `成就 ${got}/${total}　·　胜 ${s.wins} 负 ${s.losses} 平 ${s.pushes}　·　累计 ${(profit > 0 ? '+' : '') + profit}`;
+}
+function renderStatsPanel() {
+  const s = save.stats;
+  const profit = s.totalProfit || 0;
+  const statProfit = document.getElementById('statProfit');
+  statProfit.textContent = (profit > 0 ? '+' : '') + profit;
+  statProfit.classList.remove('profit-pos', 'profit-neg');
+  if (profit > 0) statProfit.classList.add('profit-pos');
+  else if (profit < 0) statProfit.classList.add('profit-neg');
+  document.getElementById('statWins').textContent = s.wins;
+  document.getElementById('statLosses').textContent = s.losses;
+  document.getElementById('statPushes').textContent = s.pushes;
+  document.getElementById('statRounds').textContent = s.rounds;
+  const decided = s.wins + s.losses;
+  document.getElementById('statWinRate').textContent = decided > 0 ? Math.round(s.wins / decided * 100) + '%' : '—';
+  document.getElementById('statStreak').textContent = s.bestStreak;
+  document.getElementById('statMaxChips').textContent = s.maxChips;
+  document.getElementById('statBlackjack').textContent = s.blackjacks;
+  document.getElementById('statBusts').textContent = s.busts;
+  const bw = s.bossWins || { exile:0, daymare:0, azita:0, ehsan:0 };
+  document.getElementById('statBossWins').textContent = `${bw.exile + bw.daymare + bw.azita + bw.ehsan}`;
+  const total = ACHIEVEMENTS.length, got = Object.keys(save.unlocked).length;
+  document.getElementById('statAch').textContent = `${got}/${total}`;
+}
+function openStats() { renderStatsPanel(); el.statsOverlay.style.display = 'flex'; }
+
+let achCategoryFilter = 'all';
+function getAchCategory(a) {
+  if (a.ultimate) return '终极';
+  if (a.hidden) return '隐藏';
+  if (a.id.startsWith('talent_')) return '天赋';
+  if (a.id.startsWith('boss_')) return 'Boss';
+  if (a.id.startsWith('skill_')) return '技能';
+  if (a.id === 'all_talents' || a.id === 'root_crown_victory') return '其他';
+  return '基础';
+}
+function renderAchievements() {
+  const visible = ACHIEVEMENTS.filter(a => {
+    if (a.hidden && !save.unlocked[a.id]) return false;
+    if (achCategoryFilter === 'all') return true;
+    return getAchCategory(a) === achCategoryFilter;
+  });
+  const total = ACHIEVEMENTS.length, got = Object.keys(save.unlocked).length;
+  el.achProgress.textContent = `已解锁 ${got} / ${total}（隐藏成就达成后才会显示）`;
+  el.achGrid.innerHTML = '';
+  for (const a of visible) {
+    const unlocked = !!save.unlocked[a.id];
+    const div = document.createElement('div');
+    div.className = 'ach-item' + (unlocked ? ' got' : '') + (a.ultimate ? ' ultimate' : '');
+    div.innerHTML = `<div class="ach-icon">${a.icon}</div><div class="ach-content"><h4>${a.name}</h4><p>${a.desc}</p></div>`;
+    el.achGrid.appendChild(div);
+  }
+  document.querySelectorAll('.ach-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.cat === achCategoryFilter);
+  });
+}
+document.querySelectorAll('.ach-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    SFX.click();
+    achCategoryFilter = tab.dataset.cat;
+    renderAchievements();
+  });
+});
+/* ================= 故事 ================= */
+let storyIndex=0, storyTimer=null, storyTyping=false, storyFullText='';
+function openStory(fromTitle) { storyIndex=0; el.storyOverlay.style.display='flex'; el.storyOverlay.dataset.from=fromTitle?'title':'start'; showStoryLine(); }
+function showStoryLine() {
+  const text = STORY_LINES[storyIndex]; storyFullText = text; storyTyping = true;
+  el.storyText.textContent = ''; clearInterval(storyTimer);
+  let i=0;
+  storyTimer = setInterval(() => {
+    if (i >= text.length) { clearInterval(storyTimer); storyTyping = false; updateStoryBtn(); return; }
+    el.storyText.textContent += text[i++];
+  }, 32);
+  updateStoryBtn();
+}
+function finishStoryTyping() {
+  if (!storyTyping) return false;
+  clearInterval(storyTimer); el.storyText.textContent = storyFullText; storyTyping = false; updateStoryBtn(); return true;
+}
+function updateStoryBtn() {
+  const isLast = storyIndex >= STORY_LINES.length - 1;
+  el.btnStoryNext.textContent = isLast ? '开 始 牌 局' : '继 续';
+}
+function advanceStory() {
+  if (finishStoryTyping()) return;
+  if (storyIndex < STORY_LINES.length - 1) { storyIndex++; showStoryLine(); }
+  else closeStory(true);
+}
+function closeStory(startGame) {
+  clearInterval(storyTimer); storyTyping = false;
+  const fromTitle = el.storyOverlay.dataset.from === 'title';
+  el.storyOverlay.style.display = 'none';
+  if (fromTitle) { showScreen('title'); return; }
+  save.introSeen = true; persist();
+  if (startGame) enterGame();
+}
+
+/* ================= 屏幕切换 ================= */
+function showScreen(name) {
+  el.titleScreen.style.display = name === 'title' ? 'flex' : 'none';
+  el.gameScreen.style.display = name === 'game' ? 'block' : 'none';
+  if (name === 'title') {
+    renderTitleStats();
+    el.btnStart.textContent = (state.phase === 'title' || state.phase === 'talent') ? '进 入 牌 局' : '继 续 牌 局';
+  }
+}
+function openTalentSelection() { state.phase = 'talent'; renderTalentGrid(); el.talentOverlay.style.display = 'flex'; }
+function enterGame() {
+  if (state.phase === 'title' || state.phase === 'talent') { showScreen('game'); openTalentSelection(); }
+  else showScreen('game');
+  render();
+}
+function onStartClick() {
+  if (state.phase === 'title' && !save.introSeen) openStory(false);
+  else enterGame();
+}
+function openAchievements() { renderAchievements(); el.achievementOverlay.style.display = 'flex'; }
+
+/* ================= 天赋选择 ================= */
+function renderTalentGrid() {
+  rollTalentChoices();
+  const hasAncient = currentTalentChoices.some(id => TALENTS[id] && TALENTS[id].ancient);
+  const poolSize = activeTalentPool().length;
+  el.talentSub.textContent = save.ancientUnlocked
+    ? `${poolSize} 枚筹码中随机抽取五枚${hasAncient ? '（含远古司辰）' : ''}`
+    : `${poolSize} 枚筹码中随机抽取五枚（集齐 10 成就解锁远古司辰）`;
+  el.talentGrid.innerHTML = '';
+  for (const id of currentTalentChoices) {
+    const t = TALENTS[id]; if (!t) continue;
+    const card = document.createElement('button');
+    card.className = 'talent-card' + (t.ancient ? ' ancient' : '');
+    card.innerHTML = `<h3>${t.name}${t.ancient ? ' · 远古' : ''}</h3><p>${t.desc}</p>`;
+    card.addEventListener('click', () => chooseTalent(id));
+    el.talentGrid.appendChild(card);
+  }
+}
+
+function chooseTalent(id) {
+  if (id === 'four') SFX.dogBark();
+  let extraMsg = '';
+  try {
+    state.talents = new Set([id]);
+    if (id === 'lion') {
+      const pool = shuffle(activeTalentPool().filter(k => k !== 'lion'));
+      if (pool.length >= 2) {
+        const a = pool[0], b = pool[1];
+        state.talents.add(a); state.talents.add(b);
+        extraMsg = `狮子匠为你带来了：${TALENTS[a].name} 与 ${TALENTS[b].name}。`;
+      }
+    }
+    if (id === 'dawn' && state.talentState.dawnBonus > 0) {
+      extraMsg = `受施之默的账簿记录着你的胜利：本局赌注上限提高 ${Math.round(state.talentState.dawnBonus * 100)}%。`;
+    }
+    if (id === 'sevenCoils' && save.pendingSevenCoilsBonus > 0) {
+      extraMsg = `七蟠的食欲未消：本局基础下注 +${save.pendingSevenCoilsBonus}。`;
+    }
+  } catch (e) {
+    console.error('选天赋异常：', e);
+  }
+
+  el.talentOverlay.style.display = 'none';
+  state.phase = 'betting';
+  renderTalents();
+  render();
+  el.message.className = 'message';
+  setMessage(extraMsg || '霍科博尔德推来一枚古金币。“下注吧。”');
+}
+
+/* ================= Boss ================= */
+function triggerExileEffect() {
+  if (!state.boss.active || state.boss.type !== 'exile') return;
+  if (state.boss.triggerCount >= 3) return;
+  state.boss.triggerCount++;
+  const pick = ['force','bone','chips'][(Math.random()*3)|0];
+  if (pick === 'force') {
+    state.boss.playerBonus += 7; state.boss.dealerBonus += 7;
+    setMessage('流亡者·武力之秘：双方点数 +7。');
+    playBossAbilityEffect('exile', el.dealerCards);
+  } else if (pick === 'bone') {
+    if (state.player.length > 0) {
+      const idx = Math.floor(Math.random()*state.player.length);
+      const removed = state.player.splice(idx,1)[0];
+      setMessage(`流亡者·小骨头：你弃掉了 ${removed.rank}${removed.suit.sym}。`);
+      playBossAbilityEffect('exile', el.playerCards);
+      if (state.player.length === 0) state.player.push(draw());
+    }
+  } else {
+    state.chips += 50;
+    setMessage('流亡者·更多筹码：你获得了 50 筹码。');
+    playBossAbilityEffect('exile', el.dealerCards);
+  }
+}
+function applyBossStartEffects() {
+  if (!state.boss.active) return;
+  if (state.boss.type === 'exile') { if (Math.random() < 0.7) triggerExileEffect(); }
+  else if (state.boss.type === 'daymare') {
+    state.boss.holeRevealed = true; state.hideHole = false;
+    setMessage('访客日魇敲击桌面：“亲爱的，我没什么好藏的。”庄家的底牌一览无余。');
+  }
+}
+function openBossChoice() {
+  const types = ['exile','daymare','azita','ehsan'];
+  const type = types[state.bossIndex % 4];
+  el.bossChoiceBox.classList.remove('daymare','azita','ehsan');
+  if (type === 'exile') {
+    el.bossChoiceName.textContent = '流 亡 者';
+    el.bossChoiceDesc.innerHTML = '打牌时可能随机触发一种效果：<br><b>武力之秘</b>　双方点数 +7<br><b>小骨头</b>　你被迫弃掉一张牌<br><b>更多筹码</b>　你获得 50 筹码';
+  } else if (type === 'daymare') {
+    el.bossChoiceBox.classList.add('daymare');
+    el.bossChoiceName.textContent = '访 客 日 魇';
+    el.bossChoiceDesc.innerHTML = '纳戈尔斯堡伯爵夫人，灯塔学会的司库。<br><b>敲击桌面</b>　庄家的底牌明牌化<br><b>咨询费</b>　每当你停牌，支付 10 筹码<br><b>玫瑰之约</b>　Boss 战胜利时额外获得 50 筹码';
+  } else if (type === 'azita') {
+    el.bossChoiceBox.classList.add('azita');
+    el.bossChoiceName.textContent = '阿 齐 塔';
+    el.bossChoiceDesc.innerHTML = '阿齐塔·布哈拉女士，上校麾下的刃之长生者，象棋大师。<br><b>棋局布局</b>　开局时她调整你一张手牌的点数 ±2<br><b>刃之切割</b>　你连续抽同花色的牌时，后一张点数 -2<br><b>将军</b>　你点数恰为 21 时被迫停牌，可支付 5 筹码解将<br><b>棋手礼赞</b>　Boss 战胜利额外获得 80 筹码';
+  } else {
+    el.bossChoiceBox.classList.add('ehsan');
+    el.bossChoiceName.textContent = '埃 桑';
+    el.bossChoiceDesc.innerHTML = '埃桑·费克里，前剑齿兽治疗师，如今的护理理事。<br><b>处方</b>　你每次停牌，他从牌堆抽一张牌，点数减半后加入你的手牌<br><b>心之衰弱</b>　他的爆牌阈值是 18，但他每局能自我治疗一次<br><b>医者的余温</b>　Boss 战胜利额外获得 90 筹码';
+  }
+  el.bossChoiceOverlay.style.display = 'flex';
+}
+async function startBossFight() {
+  el.bossChoiceOverlay.style.display = 'none';
+  const types = ['exile','daymare','azita','ehsan'];
+  state.boss.active = true;
+  state.boss.type = types[state.bossIndex % 4];
+  state.boss.playerBonus = 0; state.boss.dealerBonus = 0;
+  state.boss.triggerCount = 0; state.boss.consulFee = 0;
+  state.boss.roseTip = 0; state.boss.holeRevealed = false;
+  state.boss.azitaCheckUsed = false; state.boss.azitaCheckFee = 0;
+  state.boss.ehsanHealed = false;
+  state.boss.ehsanHealOffset = 0;
+  state.boss.ehsanPrescriptionGiven = false;
+  state.boss.ehsanPrescriptions = 0;
+  state.normalRounds = 0;
+
+  SFX.boss();
+  playBossIntro(state.boss.type);
+  startBossAmbient(state.boss.type);
+
+  resetRoundForBetting();
+}
+function skipBoss() {
+  el.bossChoiceOverlay.style.display = 'none';
+  state.normalRounds = 0;
+  stopBossAmbient();
+  resetRoundForBetting();
+}
+
+/* ================= 天赋辅助 ================= */
+function hasTalent(id) { return state.talents.has(id); }
+function resetTalentRoundState() {
+  const ts = state.talentState;
+  ts.axeUsed=false; ts.motherUsed=false; ts.travelerUsed=false; ts.forgeUsed=false;
+  ts.fruitUsed=false; ts.snowUsed=false; ts.velvetHidden=hasTalent('velvet');
+  ts.doorPeeked=false; ts.crowRedrawn=false; ts.yewExtra=false; ts.moonSwapped=false;
+  ts.witnessUsed=false; ts.eggUsed=false; ts.flintUsed=false;
+  state.skillBonus = { player:0, dealer:0 };
+  state.skillFlags = {
+    playerGlass:false, playerBell:false, playerKettle:false, playerForce:false, playerSharp:false,
+    dealerGlass:false, dealerBell:false, dealerKettle:false, dealerForce:false, dealerSharp:false,
+    stringsActive:false, stitchActive:false, thunderActive:false, timeHarpUsed:false, lensUsed:false, bronzeUsed:false,
+    songBenefits: 0, orchidChanged: false, lensHit: false, timeharpUsedThisRound: false, sightsKeptCardId: null,
+  };
+  state.playerSkillUsed = false;
+  state.dealerSkillUsed = false;
+  state.azitaLayoutDone = false;
+  state.lastAction = null;
+  state.lastPlayerScore = null;
+  state.lastDealerScore = null;
+  state.boss.ehsanHealed = false;
+  state.boss.ehsanHealOffset = 0;
+  state.boss.ehsanPrescriptionGiven = false;
+  document.getElementById('enemySkillBanner').classList.remove('show');
+}
+function playerBustThreshold() {
+  let base = hasTalent('colonel') ? 23 : 21;
+  if (state.skillFlags.thunderActive) base += 1;
+  return base;
+}
+function playerBusted() { return playerHandValue().value > playerBustThreshold(); }
+
+/* ================= 技能三选一 ================= */
+async function triggerSkillCard() {
+  if (state.playerSkillUsed) return;
+  state.playerSkillUsed = true;
+  SFX.skill();
+
+  const allIds = Object.keys(SKILL_CARDS);
+  const shuffled = shuffle([...allIds]);
+  const choices = shuffled.slice(0, 3);
+
+  const chosenId = await showSkillChoices(choices);
+
+  if (chosenId) {
+    await applySkillEffect(chosenId, 'player');
+  } else {
+    setMessage('你选择不触发任何技艺。');
+    render();
+    await sleep(400);
+  }
+}
+
+function showSkillChoices(ids) {
+  return new Promise(resolve => {
+    const grid = el.skillChoiceGrid;
+    grid.innerHTML = '';
+
+    ids.forEach(id => {
+      const skill = SKILL_CARDS[id];
+      const card = document.createElement('button');
+      card.className = 'skill-choice-card';
+      card.innerHTML =
+        `<div class="skill-card-icon">${skill.icon}</div>` +
+        `<div class="skill-card-name">${skill.name}</div>` +
+        `<div class="skill-card-desc">${skill.desc}</div>`;
+      card.addEventListener('click', () => {
+        playSkillEffect(card);
+        cleanup();
+        resolve(id);
+      });
+      grid.appendChild(card);
+    });
+
+    el.skillOverlay.style.display = 'flex';
+
+    const onSkip = () => {
+      cleanup();
+      resolve(null);
+    };
+    const cleanup = () => {
+      el.skillOverlay.style.display = 'none';
+      el.btnSkillSkip.removeEventListener('click', onSkip);
+    };
+    el.btnSkillSkip.addEventListener('click', onSkip);
+  });
+}
+
+function playSkillEffect(anchorEl) {
+  let cx = window.innerWidth / 2, cy = window.innerHeight * 0.42;
+  if (anchorEl) {
+    const r = anchorEl.getBoundingClientRect();
+    cx = r.left + r.width / 2;
+    cy = r.top + r.height / 2;
+  }
+  const colors = ['#c9a227','#e8cf6b','#f7ecb8','#fffbe6','#ffd75e'];
+  const n = isSmallScreen() ? 45 : 75;
+  for (let i = 0; i < n; i++) {
+    const ang = Math.random() * Math.PI * 2;
+    const spd = 1 + Math.random() * 6;
+    fx.particles.push({
+      x: cx + (Math.random() - 0.5) * 30,
+      y: cy + (Math.random() - 0.5) * 30,
+      vx: Math.cos(ang) * spd * 0.55,
+      vy: -2 - Math.random() * 7,
+      life: 0, maxLife: 50 + Math.random() * 60,
+      size: 1.4 + Math.random() * 3.4,
+      color: colors[(Math.random() * colors.length) | 0],
+      gravity: -0.02, drag: 0.97,
+      twinkle: Math.random() * Math.PI * 2,
+      shape: Math.random() < 0.5 ? 'star' : 'circle',
+    });
+  }
+  startFxLoop();
+  document.body.classList.add('skill-flash');
+  setTimeout(() => document.body.classList.remove('skill-flash'), 850);
+}
+
+async function showEnemySkillBanner(name) {
+  const b = document.getElementById('enemySkillBanner');
+  b.textContent = `对手将要使用「${name}」`;
+  b.classList.add('show');
+  await sleep(1500);
+  b.classList.remove('show');
+  await sleep(250);
+}
+
+async function triggerDealerSkillCard() {
+  if (state.dealerSkillUsed) return;
+  state.dealerSkillUsed = true;
+  const ids = Object.keys(SKILL_CARDS);
+  const id = ids[Math.floor(Math.random() * ids.length)];
+  await showEnemySkillBanner(SKILL_CARDS[id].name);
+  setMessage(`对手使用了「${SKILL_CARDS[id].name}」。`);
+  render();
+  await sleep(300);
+  await applySkillEffect(id, 'dealer');
+  render();
+  await sleep(300);
+}
+
+async function applySkillEffect(id, caster) {
+  const isPlayer = caster === 'player';
+  const me = isPlayer ? state.player : state.dealer;
+  const foe = isPlayer ? state.dealer : state.player;
+
+  if (isPlayer) {
+    if (!save.stats.skillsUsed) save.stats.skillsUsed = {};
+    save.stats.skillsUsed[id] = true;
+    persist();
+    if (Object.keys(SKILL_CARDS).every(k => save.stats.skillsUsed[k])) {
+      unlock('skill_all_used');
+    }
+  }
+
+  switch (id) {
+    case 'spice': {
+      if (isPlayer) { state.skillBonus.dealer += 2; setMessage('香料与滋味：对手点数 +2。'); }
+      else { state.skillBonus.player += 2; setMessage('对手的香料与滋味：你的点数 +2。'); }
+      break;
+    }
+    case 'glass': {
+      if (isPlayer) { state.skillFlags.playerGlass = true; setMessage('玻璃与锻光：对手下次抽牌将抽到高点数牌。'); }
+      else { state.skillFlags.dealerGlass = true; setMessage('对手的玻璃与锻光：你下次抽牌将更容易爆牌。'); }
+      break;
+    }
+    case 'force': {
+      if (isPlayer) { state.skillFlags.playerForce = true; setMessage('武力之敕令：“假如我直接赢。”……但什么也没有发生。'); unlock('skill_force'); }
+      else { state.skillFlags.dealerForce = true; setMessage('对手的武力之敕令：“假如我直接赢。”……但什么也没有发生。'); unlock('enemy_force_seen'); }
+      break;
+    }
+    case 'transmute': {
+      if (me.length >= 2) {
+        const card = me[1];
+        card.rank = 'A'; card.points = null; card.modified = true;
+        setMessage(isPlayer ? '嬗变与解放：你的第二张牌变为 A。' : '对手的嬗变与解放：她的第二张牌变为 A。');
+      }
+      break;
+    }
+    case 'refine': {
+      if (me.length >= 2) {
+        const card = me[1];
+        card.rank = 'K'; card.points = 10; card.modified = true;
+        setMessage(isPlayer ? '精炼与擢升：你的第二张牌变为 K。' : '对手的精炼与擢升：她的第二张牌变为 K。');
+      }
+      break;
+    }
+    case 'bell': {
+      if (isPlayer) { state.skillFlags.playerBell = true; setMessage('洪钟与铜器：对手最多再抽一张牌。'); }
+      else { state.skillFlags.dealerBell = true; setMessage('对手的洪钟与铜器：你最多再抽一张牌。'); }
+      break;
+    }
+    case 'sharp': {
+      if (isPlayer && state.boss.active && state.boss.type === 'exile') {
+        setMessage('锋锐切向流亡者，刀刃卷曲了。“那种东西对我没用。”');
+        unlock('skill_sharp_exile');
+        break;
+      }
+      if (foe.length > 0) {
+        const removed = foe.shift();
+        if (isPlayer) { state.skillFlags.playerSharp = true; setMessage(`锋锐：你切碎了对手的 ${removed.rank}${removed.suit.sym}。`); }
+        else { state.skillFlags.dealerSharp = true; setMessage(`对手的锋锐：你的 ${removed.rank}${removed.suit.sym} 被切碎了。`); unlock('enemy_sharp_hit'); }
+        render();
+      }
+      break;
+    }
+    case 'kettle': {
+      if (isPlayer) { state.skillFlags.playerKettle = true; setMessage('水壶：结算时双方点数取平均值。'); }
+      else { state.skillFlags.dealerKettle = true; setMessage('对手的水壶：结算时双方点数取平均值。'); }
+      break;
+    }
+    case 'flute': { await fluteEffect(caster); break; }
+    case 'resurgence': {
+      if (me.length > 0) {
+        const discarded = me.pop();
+        const discardedVal = cardValue(discarded);
+        let drawnSum = 0;
+        for (let i = 0; i < 2; i++) {
+          const c = draw();
+          c.points = Math.max(1, cardValue(c) - 1);
+          c.modified = true;
+          me.push(c);
+          drawnSum += c.points;
+        }
+        setMessage(`复苏与羽化：弃掉 ${discarded.rank}${discarded.suit.sym}（${discardedVal}），抽两张（合计 ${drawnSum}）。`);
+        if (discardedVal === drawnSum) unlock('skill_resurgence');
+      }
+      break;
+    }
+    case 'strings': { state.skillFlags.stringsActive = true; setMessage('弦乐与歌谣：本局每抽到一张偶数牌，获得 +1 筹码。'); break; }
+    case 'stitching': { state.skillFlags.stitchActive = true; setMessage('缝合与装订：下一次负面点数修正将被缝合归零。'); break; }
+    case 'orchids': {
+      if (foe.length > 0) {
+        const idx = foe.findIndex(c => !c.isBack);
+        const target = idx >= 0 ? foe[idx] : foe[0];
+        const newSuit = SUITS[Math.floor(Math.random() * SUITS.length)];
+        target.suit = newSuit;
+        target.modified = true;
+        setMessage(`兰花与迷药：对手 ${target.rank} 的花色被改为 ${newSuit.sym}。`);
+        state.skillFlags.orchidChanged = true;
+      }
+      break;
+    }
+    case 'sights': {
+  const top3 = state.deck.slice(-3).reverse();
+  if (top3.length === 0) break;
+  let keptIdx = 0;
+  if (top3.length === 1) {
+    keptIdx = 0;
+  } else if (isPlayer) {
+    const names = top3.map((c, i) => `${i + 1}. ${c.rank}${c.suit.sym}`).join('\\n');
+    const input = prompt(`景象与感知：牌堆顶 ${top3.length} 张是：\\n\\n${names}\\n\\n选择要加入手牌的一张（输入序号 1-${top3.length}），点取消则默认保留第一张。`);
+    if (input !== null) {
+      const parsed = parseInt(input, 10) - 1;
+      if (!isNaN(parsed) && parsed >= 0 && parsed < top3.length) keptIdx = parsed;
+    }
+  } else {
+    keptIdx = Math.floor(Math.random() * top3.length);
+  }
+  const kept = top3[keptIdx];
+  const deckIdx = state.deck.length - 1 - keptIdx;
+  state.deck.splice(deckIdx, 1);
+  me.push(kept);
+  if (isPlayer) {
+    state.skillFlags.sightsKeptCardId = kept.id;
+    setMessage(`景象与感知：你保留了 ${kept.rank}${kept.suit.sym}，其余放回。`);
+  } else {
+    setMessage(`对手的景象与感知：她保留了 ${kept.rank}${kept.suit.sym}。`);
+  }
+  break;
+}
+    case 'insects': {
+      if (foe.length > 0) {
+        const suit = foe[foe.length - 1].suit.sym;
+        const foeRank = foe[foe.length - 1].rank;
+        const idx = state.deck.findIndex(c => c.suit.sym === suit);
+        if (idx !== -1) {
+          const c = state.deck.splice(idx, 1)[0];
+          me.push(c);
+          setMessage(`昆虫与花蜜：复制对手花色 ${suit}，抽到了 ${c.rank}${c.suit.sym}。`);
+          if (c.rank === foeRank) unlock('skill_insects');
+        }
+      }
+      break;
+    }
+    case 'lens': {
+      if (foe.length > 0) {
+        const removed = foe.shift();
+        setMessage(`蒂尔黛透镜：对手弃掉 ${removed.rank}${removed.suit.sym}（头痛）。`);
+        state.skillFlags.lensUsed = true;
+        state.skillFlags.lensHit = true;
+      }
+      break;
+    }
+    case 'thunderstruck': { state.skillFlags.thunderActive = true; setMessage('襁褓雷霆：爆牌阈值 +1，停牌时获得额外筹码。'); break; }
+    case 'timeharp': {
+      if (state.lastAction && state.lastAction.type === 'hit' && state.player.length > 0) {
+        const c = state.player.pop();
+        state.deck.push(c);
+        setMessage(`时键琴：撤销了上一次要牌，${c.rank}${c.suit.sym} 回到牌堆。`);
+        state.skillFlags.timeharpUsedThisRound = true;
+      } else if (state.lastAction && state.lastAction.type === 'stand') {
+        state.phase = 'playerTurn';
+        setMessage('时键琴：撤销了停牌，回到要牌前的时刻。');
+        state.skillFlags.timeharpUsedThisRound = true;
+      } else {
+        setMessage('时键琴：此刻无可回溯。');
+      }
+      break;
+    }
+    case 'bronze': {
+      let removed = 0;
+      let hasAce = false;
+      for (let i = 0; i < 3; i++) {
+        if (state.deck.length > 0) {
+          const c = state.deck.pop();
+          if (c.rank === 'A') hasAce = true;
+          removed++;
+        }
+      }
+      setMessage(`青铜刀：从牌堆顶切碎了 ${removed} 张牌。`);
+      if (hasAce) unlock('skill_bronze');
+      break;
+    }
+  }
+  render();
+}
+
+async function fluteEffect(caster) {
+  const isPlayer = caster === 'player';
+  const topThree = state.deck.slice(-3).reverse();
+  if (topThree.length === 0) { setMessage('马扎林横笛：牌堆已空。'); return; }
+  if (isPlayer) {
+    const names = topThree.map(c => `${c.rank}${c.suit.sym}`).join('、');
+    const reverse = confirm(`马扎林横笛：牌堆顶三张是 ${names}。\\n\\n点击“确定”反转放回顺序，点击“取消”保持原序。`);
+    if (reverse && topThree.length >= 2) {
+      const rest = state.deck.slice(0, -topThree.length);
+      state.deck = rest.concat(topThree.reverse());
+      setMessage('马扎林横笛：你重排了牌堆顶三张。');
+    } else setMessage('马扎林横笛：你记住了牌序，保持了原样。');
+  } else {
+    if (Math.random() < 0.5 && topThree.length >= 2) {
+      const rest = state.deck.slice(0, -topThree.length);
+      state.deck = rest.concat(topThree.reverse());
+    }
+    setMessage('对手吹响了马扎林横笛，牌堆顶的牌序被搅动了。');
+  }
+}
+/* ================= 牌堆与流程 ================= */
+function draw(forPlayer) {
+  if (state.deck.length === 0) { state.deck = shuffle(newDeck()); setMessage('牌堆用尽，重新洗牌。'); }
+  let card;
+  if (state.talents.has('colonel') && forPlayer !== undefined) {
+    const hand = forPlayer ? state.player : state.dealer;
+    const currentVal = handValue(hand).value;
+    if (currentVal >= 18 && currentVal <= 20 && Math.random() < 0.45) {
+      const idx = state.deck.findIndex(c => handValue([...hand, c]).value === 21);
+      if (idx !== -1) {
+        card = state.deck.splice(idx, 1)[0];
+        triggerHook(card, 'onDraw', { card, state, handValue, isBlackjack, log: setMessage });
+        if (state.skillFlags.stringsActive && cardValue(card) % 2 === 0 && forPlayer) {
+          state.chips += 1;
+          state.skillFlags.songBenefits++;
+        }
+        return card;
+      }
+    }
+    if (currentVal >= 16 && currentVal <= 17 && Math.random() < 0.25) {
+      const idx = state.deck.findIndex(c => { const v = handValue([...hand, c]).value; return v >= 19 && v <= 21; });
+      if (idx !== -1) {
+        card = state.deck.splice(idx, 1)[0];
+        triggerHook(card, 'onDraw', { card, state, handValue, isBlackjack, log: setMessage });
+        if (state.skillFlags.stringsActive && cardValue(card) % 2 === 0 && forPlayer) {
+          state.chips += 1;
+          state.skillFlags.songBenefits++;
+        }
+        return card;
+      }
+    }
+  }
+  card = state.deck.pop();
+  triggerHook(card, 'onDraw', { card, state, handValue, isBlackjack, log: setMessage });
+  if (state.skillFlags.stringsActive && cardValue(card) % 2 === 0 && forPlayer) {
+    state.chips += 1;
+    state.skillFlags.songBenefits++;
+  }
+  return card;
+}
+
+async function startRound(amount) {
+  if (state.busy || state.phase !== 'betting') return;
+  let sevenCoilsBonus = 0;
+  if (hasTalent('sevenCoils') && save.pendingSevenCoilsBonus > 0) {
+    sevenCoilsBonus = save.pendingSevenCoilsBonus;
+    save.pendingSevenCoilsBonus = 0; persist();
+  }
+  if (hasTalent('dawn') && state.talentState.dawnBonus > 0) {
+    amount = Math.min(amount, Math.floor(amount * (1 + state.talentState.dawnBonus)));
+  }
+  amount = Math.floor(Math.min(amount, state.chips));
+  if (amount <= 0) return;
+
+  state.busy = true;
+  try {
+    state.chips -= amount; state.bet = amount;
+    if (sevenCoilsBonus > 0) state.chips += sevenCoilsBonus;
+    state.player = []; state.dealer = [];
+    state.hideHole = true; state.finalP = null; state.finalD = null;
+    state.roundFlags = {};
+    state.boss.consulFee = 0; state.boss.roseTip = 0; state.boss.holeRevealed = false;
+    state.boss.azitaCheckUsed = false;
+    state.boss.ehsanHealed = false; state.boss.ehsanHealOffset = 0;
+    state.boss.ehsanPrescriptionGiven = false;
+    state.phase = 'dealing';
+    resetTalentRoundState();
+
+    if (hasTalent('giribrago')) state.chips += 15;
+
+    el.notes.innerHTML = '';
+    el.message.className = 'message';
+    const dealingMsgs = {
+      exile: '流亡者洗了洗牌……',
+      daymare: '日魇用戒指敲了敲桌面，发牌……',
+      azita: '阿齐塔摆好棋盘，发牌……',
+      ehsan: '埃桑翻开了他的处方本，发牌……',
+    };
+    setMessage(state.boss.active ? dealingMsgs[state.boss.type] : '霍科博尔德洗了洗牌，发牌……');
+    if (sevenCoilsBonus > 0) el.notes.innerHTML = `<div>七蟠：本局基础下注 +${sevenCoilsBonus}</div>`;
+    render();
+    await sleep(220);
+
+    SFX.deal(); state.player.push(draw(true)); render(); await sleep(200);
+    SFX.deal(); state.dealer.push(draw(false)); render(); await sleep(200);
+    SFX.deal(); state.player.push(draw(true)); render(); await sleep(200);
+    SFX.deal(); state.dealer.push(draw(false)); render(); await sleep(300);
+
+    if (hasTalent('horse') && state.dealer.length > 0) {
+      state.roundFlags.horseBurn = true;
+      const idx = Math.floor(Math.random()*state.dealer.length);
+      const burned = state.dealer.splice(idx,1)[0];
+      state.deck.unshift(burned);
+      setMessage('焚真之火：烧掉了对手的一张牌。'); render(); await sleep(650);
+    }
+    if (hasTalent('door') && !state.talentState.doorPeeked) {
+      state.talentState.doorPeeked = true;
+      const top = state.deck[state.deck.length - 1];
+      if (top) { setMessage(`瞳中之扉：牌堆顶是 ${top.rank}${top.suit.sym}。`); render(); await sleep(500); }
+    }
+    if (hasTalent('forge') && !state.talentState.forgeUsed && state.player.length > 0) {
+      state.talentState.forgeUsed = true;
+      const idx = Math.floor(Math.random()*state.player.length);
+      const discarded = state.player.splice(idx,1)[0];
+      state.player.push(draw(true));
+      setMessage(`白日铸炉：弃掉 ${discarded.rank}${discarded.suit.sym}，重抽一张。`); render(); await sleep(500);
+    }
+
+    if (state.boss.active && state.boss.type === 'azita' && state.player.length > 0 && !state.azitaLayoutDone) {
+      state.azitaLayoutDone = true;
+      const idx = Math.floor(Math.random() * state.player.length);
+      const card = state.player[idx];
+      const delta = Math.random() < 0.5 ? 2 : -2;
+      const originalVal = cardValue(card);
+      const newVal = Math.max(1, originalVal + delta);
+      card.points = newVal; card.modified = true;
+      setMessage(`阿齐塔·棋局布局：她调整了你的一张手牌（${card.rank}${card.suit.sym}），${originalVal} → ${newVal}。`);
+      playBossAbilityEffect('azita', el.playerCards);
+      render(); await sleep(550);
+    }
+
+    applyBossStartEffects();
+    render(); await sleep(350);
+
+    if (playerBusted()) {
+      if (hasTalent('fruit') && !state.talentState.fruitUsed) {
+        state.talentState.fruitUsed = true;
+        while (state.player.length > 0 && playerBusted()) state.player.pop();
+        setMessage('光明果：爆牌被抵消，手牌回退。'); render(); await sleep(500);
+      } else if (hasTalent('egg') && !state.talentState.eggUsed) {
+        state.talentState.eggUsed = true;
+        while (state.player.length > 0 && playerBusted()) state.player.pop();
+        setMessage('逆孵之卵：你逃入辉光，弃掉最后一张牌。'); render(); await sleep(500);
+      } else { state.hideHole = false; render(); await sleep(450); return settle(); }
+    }
+    if (isBlackjack(state.player)) { state.hideHole = false; render(); await sleep(450); return settle(); }
+
+    state.phase = 'playerTurn';
+    setMessage(state.boss.active ? 'Boss 战 · 轮到你了。' : '“轮到你了。”');
+    render();
+  } finally { state.busy = false; }
+}
+
+async function useMotherTalent() {
+  if (state.busy || state.phase !== 'playerTurn') return;
+  if (!hasTalent('mother') || state.talentState.motherUsed) return;
+  if (state.player.length === 0) return;
+  state.busy = true;
+  try {
+    state.talentState.motherUsed = true;
+    const idx = Math.floor(Math.random() * state.player.length);
+    const discarded = state.player.splice(idx, 1)[0];
+    state.deck.unshift(discarded);
+    const newCard = draw(true);
+    state.player.push(newCard);
+    setMessage(`蚁母：弃掉 ${discarded.rank}${discarded.suit.sym}，重抽 ${newCard.rank}${newCard.suit.sym}。`);
+    render();
+    await sleep(400);
+    if (playerBusted()) {
+      await finishPlayerTurn();
+    } else if (playerHandValue().value >= playerBustThreshold()) {
+      await finishPlayerTurn();
+    }
+  } finally {
+    state.busy = false;
+  }
+}
+
+async function useTravelerTalent() {
+  if (state.busy || state.phase !== 'playerTurn') return;
+  if (!hasTalent('traveler') || state.talentState.travelerUsed) return;
+  if (state.player.length === 0 || state.deck.length === 0) return;
+
+  const topCard = state.deck[state.deck.length - 1];
+  const names = state.player.map((c, i) => `${i+1}. ${c.rank}${c.suit.sym}`).join('\\n');
+  const input = prompt(`浪游旅人：选择要与牌堆顶（${topCard.rank}${topCard.suit.sym}）交换的手牌：\\n\\n${names}\\n\\n输入序号（1-${state.player.length}），点取消放弃。`);
+  if (input === null) return;
+  const idx = parseInt(input, 10) - 1;
+  if (isNaN(idx) || idx < 0 || idx >= state.player.length) {
+    setMessage('输入无效，交换取消。');
+    return;
+  }
+
+  state.busy = true;
+  try {
+    state.talentState.travelerUsed = true;
+    const removed = state.player.splice(idx, 1)[0];
+    const top = state.deck.pop();
+    state.player.splice(idx, 0, top);
+    state.deck.push(removed);
+    setMessage(`浪游旅人：${removed.rank}${removed.suit.sym} 与牌堆顶 ${top.rank}${top.suit.sym} 交换。`);
+    render();
+    await sleep(400);
+    if (playerBusted()) {
+      await finishPlayerTurn();
+    } else if (playerHandValue().value >= playerBustThreshold()) {
+      await finishPlayerTurn();
+    }
+  } finally {
+    state.busy = false;
+  }
+}
+
+async function useFlintTalent() {
+  if (state.busy || state.phase !== 'playerTurn') return;
+  if (!hasTalent('flint') || state.talentState.flintUsed) return;
+  const modified = state.player.filter(c => c.modified);
+  if (modified.length === 0) return;
+
+  const names = modified.map((c, i) => `${i+1}. ${c.rank}${c.suit.sym}`).join('\\n');
+  const input = prompt(`燧石：选择要重置为原始点数的手牌：\\n\\n${names}\\n\\n输入序号（1-${modified.length}），点取消放弃。`);
+  if (input === null) return;
+  const idx = parseInt(input, 10) - 1;
+  if (isNaN(idx) || idx < 0 || idx >= modified.length) {
+    setMessage('输入无效，重置取消。');
+    return;
+  }
+
+  state.busy = true;
+  try {
+    state.talentState.flintUsed = true;
+    const target = modified[idx];
+    const oldDesc = `${target.rank}${target.suit.sym}`;
+    target.rank = target._origRank;
+    target.points = null;
+    target.modified = false;
+    target.isPrescription = false;
+    setMessage(`燧石：${oldDesc} 已重置为 ${target._origRank}${target.suit.sym}。`);
+    render();
+    await sleep(400);
+  } finally {
+    state.busy = false;
+  }
+}
+
+async function playerHit() {
+  if (state.busy || state.phase !== 'playerTurn') return;
+  state.busy = true;
+  try {
+    state.lastAction = { type: 'hit' };
+    SFX.hit();
+    const newCard = draw(true);
+    state.player.push(newCard);
+    render(); await sleep(180);
+
+    if (state.boss.active && state.boss.type === 'azita' && state.player.length >= 2) {
+      const prevCard = state.player[state.player.length - 2];
+      if (prevCard.suit.sym === newCard.suit.sym) {
+        const originalVal = cardValue(newCard);
+        if (state.skillFlags.stitchActive) {
+          state.skillFlags.stitchActive = false;
+          setMessage('缝合与装订：阿齐塔的切割被缝回了完整。');
+        } else {
+          const newVal = Math.max(1, originalVal - 2);
+          newCard.points = newVal; newCard.modified = true;
+          setMessage(`阿齐塔·刃之切割：同花色（${newCard.suit.sym}），${originalVal} → ${newVal}。`);
+          playBossAbilityEffect('azita', el.playerCards);
+        }
+        render(); await sleep(450);
+      }
+    }
+
+    if (state.skillFlags.dealerGlass) {
+      state.skillFlags.dealerGlass = false;
+      const idx = state.deck.findIndex(c => cardValue(c) >= 10);
+      if (idx !== -1) {
+        const high = state.deck.splice(idx, 1)[0];
+        const last = state.player.pop();
+        state.deck.push(last);
+        state.player.push(high);
+        setMessage('对手的玻璃与锻光：一张高点数牌被推到了你面前。');
+        render(); await sleep(400);
+      }
+    }
+
+    const curCard = state.player[state.player.length - 1];
+    if (hasTalent('crow') && !state.talentState.crowRedrawn && cardValue(curCard) <= 3) {
+  state.talentState.crowRedrawn = true;
+  state.player.pop(); state.deck.unshift(curCard);
+  const replacement = draw(true); state.player.push(replacement);
+  setMessage(`拾滩鸦：${curCard.rank} 太小了，重抽 ${replacement.rank}${replacement.suit.sym}。`);
+  render(); await sleep(450);
+    }
+    if (hasTalent('yew') && !state.talentState.yewExtra && Math.random() < 0.3) {
+      state.talentState.yewExtra = true;
+      state.player.push(draw(true));
+      setMessage('环杉：不安的奇想驱使你多抽了一张。'); render(); await sleep(350);
+    }
+    if (state.boss.active && state.boss.type === 'exile' && Math.random() < 0.25) {
+      triggerExileEffect(); render(); await sleep(300);
+    }
+    if (hasTalent('axe') && !state.talentState.axeUsed && playerBusted()) {
+      state.talentState.axeUsed = true;
+      state.player.pop();
+      setMessage('双角斧：门关未允。这张牌不计入点数。'); render(); await sleep(400);
+    }
+
+    if (state.player.length === 3 && !state.playerSkillUsed) {
+      setMessage('技艺卡牌正在浮现……');
+      render();
+      await sleep(1000);
+      await triggerSkillCard();
+      render();
+    }
+
+    if (state.skillFlags.dealerBell) {
+      state.skillFlags.dealerBell = false;
+      setMessage('对手的洪钟与铜器：钟声落下，你只能停牌。');
+      render(); await sleep(400);
+      return finishPlayerTurn();
+    }
+
+    if (state.boss.active && state.boss.type === 'azita' && !state.boss.azitaCheckUsed) {
+      const hv = playerHandValue().value;
+      if (hv === 21 && state.player.length > 2) {
+        state.boss.azitaCheckUsed = true;
+        const canPay = state.chips >= 5;
+        const msg = canPay
+          ? '阿齐塔宣布“将军”。支付 5 筹码解将，继续要牌？\\n\\n确定=解将，取消=停牌。'
+          : '阿齐塔宣布“将军”。筹码不足，无法解将。';
+        const pay = canPay && confirm(msg);
+        if (pay) {
+          state.chips -= 5;
+          state.boss.azitaCheckFee += 5;
+          setMessage('你支付了 5 筹码，棋局继续。');
+          render(); await sleep(400);
+        } else {
+          setMessage('你接受了将军，被迫停牌。');
+          render(); await sleep(400);
+          return finishPlayerTurn();
+        }
+      }
+    }
+
+    if (playerBusted()) {
+      if (hasTalent('fruit') && !state.talentState.fruitUsed) {
+        state.talentState.fruitUsed = true;
+        while (state.player.length > 0 && playerBusted()) state.player.pop();
+        setMessage('光明果：爆牌被抵消，手牌回退。'); render(); await sleep(500);
+      } else if (hasTalent('egg') && !state.talentState.eggUsed) {
+        state.talentState.eggUsed = true;
+        while (state.player.length > 0 && playerBusted()) state.player.pop();
+        setMessage('逆孵之卵：你逃入辉光，弃掉最后一张牌。'); render(); await sleep(500);
+        return finishPlayerTurn();
+      } else await finishPlayerTurn();
+    } else if (playerHandValue().value >= playerBustThreshold()) await finishPlayerTurn();
+  } finally { state.busy = false; }
+}
+
+async function playerDouble() {
+  if (state.busy || state.phase !== 'playerTurn') return;
+  if (state.player.length !== 2 || state.chips < state.bet) return;
+  state.busy = true;
+  try {
+    state.chips -= state.bet; state.bet *= 2;
+    SFX.hit();
+    state.player.push(draw(true)); render(); await sleep(300);
+    if (state.boss.active && state.boss.type === 'exile' && Math.random() < 0.25) { triggerExileEffect(); render(); await sleep(300); }
+    await finishPlayerTurn();
+  } finally { state.busy = false; }
+}
+
+async function playerStand() {
+  if (state.busy || state.phase !== 'playerTurn') return;
+  state.busy = true;
+  try {
+    state.lastAction = { type: 'stand' };
+    SFX.stand();
+    await finishPlayerTurn();
+  } finally { state.busy = false; }
+}
+
+async function finishPlayerTurn() {
+  if (state.boss.active && state.boss.type === 'ehsan' && !state.boss.ehsanPrescriptionGiven) {
+    state.boss.ehsanPrescriptionGiven = true;
+    const pill = draw(false);
+    const origVal = cardValue(pill);
+    pill.points = Math.max(1, Math.floor(origVal / 2));
+    pill.modified = true;
+    pill.isPrescription = true;
+    state.player.push(pill);
+    state.boss.ehsanPrescriptions++;
+    setMessage(`埃桑的处方：${pill.rank}${pill.suit.sym}（${origVal}）→ ${pill.points}，加入你的手牌。`);
+    playPrescriptionEffect();
+    render();
+    await sleep(750);
+  }
+
+  if (state.boss.active && state.boss.type === 'daymare') {
+    const fee = Math.min(10, state.chips);
+    state.chips -= fee; state.boss.consulFee += fee;
+    setMessage(`访客日魇敲击桌面：“咨询费，${fee} 筹码。”`);
+    playBossAbilityEffect('daymare', el.dealerCards);
+    render(); await sleep(420);
+  }
+  if (hasTalent('florist')) {
+    state.chips += 5; setMessage('制花人：你在停牌时获得了 5 筹码的慰藉。'); render(); await sleep(350);
+  }
+  if (state.skillFlags.thunderActive) {
+    state.chips += 3;
+    setMessage('襁褓雷霆：停牌时，风暴为你带来 3 筹码。');
+    render(); await sleep(350);
+  }
+
+  triggerHandHook(state.player, 'onStand', { state, handValue, isBlackjack, log: setMessage });
+
+  state.phase = 'dealerTurn';
+  state.hideHole = false;
+  const dealerMsgs = {
+    exile: '流亡者翻开了底牌。',
+    daymare: '日魇翻开了底牌。',
+    azita: '阿齐塔翻开了底牌。',
+    ehsan: '埃桑翻开了底牌。',
+  };
+  setMessage(state.boss.active ? dealerMsgs[state.boss.type] : '霍科博尔德翻开底牌。');
+  render(); await sleep(500);
+
+  const canRescue = hasTalent('wolf') || hasTalent('moth') || hasTalent('four') || hasTalent('tide') || hasTalent('sevenCoils');
+  if (playerBusted() && !canRescue) return settle();
+
+  await dealerPlay();
+  await sleep(200);
+  settle();
+}
+
+async function dealerPlay() {
+  const randomMode = hasTalent('crown');
+  let guard = 0;
+  let bellCount = 0;
+  const bellLimit = state.skillFlags.playerBell ? 1 : Infinity;
+  const isEhsan = state.boss.active && state.boss.type === 'ehsan';
+
+  while (guard++ < 20) {
+    const v = dealerHandValue().value;
+    if (v > 21) break;
+    if (state.dealer.length >= 11) break;
+
+    if (isEhsan && v >= 18) {
+      if (!state.boss.ehsanHealed) {
+        state.boss.ehsanHealed = true;
+        state.boss.ehsanHealOffset = v - 17;
+        setMessage('埃桑·心之衰弱：他稳住了自己，点数重置为 17。');
+        playBossAbilityEffect('ehsan', el.dealerCards);
+        render();
+        await sleep(800);
+        break;
+      } else {
+        break;
+      }
+    }
+
+    let shouldDraw;
+    if (randomMode) {
+      if (v < 17) shouldDraw = true;
+      else if (v >= 21) shouldDraw = false;
+      else shouldDraw = Math.random() < 0.5;
+    } else shouldDraw = v < 17;
+    if (!shouldDraw) break;
+    if (bellCount >= bellLimit) break;
+
+    if (hasTalent('witness') && !state.talentState.witnessUsed) {
+      state.talentState.witnessUsed = true;
+      const drawn = draw(false);
+      state.deck.unshift(drawn);
+      setMessage(`见证人：你否决了对手抽到的 ${drawn.rank}${drawn.suit.sym}，令其重抽。`);
+      render(); await sleep(500);
+      state.dealer.push(draw(false));
+      render(); await sleep(460);
+      bellCount++;
+      continue;
+    }
+
+    if (hasTalent('snow') && !state.talentState.snowUsed) {
+      state.talentState.snowUsed = true;
+      setMessage('白雪：对手的第一次要牌被死寂吞没。');
+      render(); await sleep(400);
+      break;
+    }
+
+    let drawnCard = draw(false);
+
+    if (state.skillFlags.playerGlass) {
+      state.skillFlags.playerGlass = false;
+      const idx = state.deck.findIndex(c => cardValue(c) >= 10);
+      if (idx !== -1) {
+        const high = state.deck.splice(idx, 1)[0];
+        state.deck.push(drawnCard);
+        drawnCard = high;
+        setMessage('玻璃与锻光：高点数牌被推到了对手面前。');
+      }
+    }
+
+    state.dealer.push(drawnCard);
+    render(); await sleep(460);
+    bellCount++;
+
+    if (state.dealer.length === 3 && !state.dealerSkillUsed) {
+      await triggerDealerSkillCard();
+      if (dealerHandValue().value > 21) break;
+    }
+  }
+
+  if (state.skillFlags.playerBell && bellCount >= 1) {
+    state.skillFlags.playerBell = false;
+    setMessage('洪钟与铜器：钟声落下，对手不能再要牌。');
+    render(); await sleep(400);
+  }
+}
+/* ================= 结算 ================= */
+function pickLine(kind, bossType) {
+  let pool;
+  if (bossType === 'exile') pool = BOSS_LINES.exile[kind] || BOSS_LINES.exile.win;
+  else if (bossType === 'daymare') pool = BOSS_LINES.daymare[kind] || BOSS_LINES.daymare.win;
+  else if (bossType === 'azita') pool = BOSS_LINES.azita[kind] || BOSS_LINES.azita.win;
+  else if (bossType === 'ehsan') pool = BOSS_LINES.ehsan[kind] || BOSS_LINES.ehsan.win;
+  else pool = HOCK_LINES[kind] || HOCK_LINES.win;
+  return pool[(Math.random()*pool.length)|0];
+}
+
+function settle() {
+  state.hideHole = false;
+  state.phase = 'settled';
+
+  const pBase = playerHandValue().value;
+  const dBase = dealerHandValue().value;
+  let pFinal = pBase;
+  let dFinal = dBase;
+
+  const notes = [];
+  const t = state.talents;
+  const flags = state.roundFlags;
+  const immutable = t.has('blackbone');
+
+  if (t.has('hidden') && dFinal > 0 && dFinal % 7 === 0) {
+    notes.push(`隐而不显：对手点数 ${dFinal} 归零`);
+    dFinal = 0; flags.hiddenZero = true;
+  }
+  if (t.has('moth') && !immutable) {
+    const d = Math.random() < 0.5 ? 10 : -10;
+    pFinal = Math.max(0, pFinal + d);
+    notes.push(`飞蛾：你 ${d > 0 ? '+' : ''}${d}`);
+  }
+  if (t.has('wolf') && !immutable) {
+    if (state.skillFlags.stitchActive) {
+      state.skillFlags.stitchActive = false;
+      notes.push('缝合与装订：裂分之狼的撕扯被缝回了完整。');
+    } else {
+      const a = 1 + Math.floor(Math.random()*6);
+      const b = 1 + Math.floor(Math.random()*6);
+      pFinal = Math.max(0, pFinal - a); dFinal = Math.max(0, dFinal - b);
+      notes.push(`裂分之狼：你 -${a}，对手 -${b}`);
+    }
+  }
+  if (t.has('sun') && !immutable) {
+    const d = Math.random() < 0.5 ? 2 : -2;
+    dFinal = Math.max(0, dFinal + d);
+    notes.push(`残阳：对手 ${d > 0 ? '+' : ''}${d}`);
+  }
+  if (t.has('tide') && !immutable) {
+    const d = Math.random() < 0.5 ? 3 : -3;
+    pFinal = Math.max(0, pFinal + d);
+    notes.push(`浪潮：你 ${d > 0 ? '+' : ''}${d}`);
+  }
+  if (t.has('moon') && !state.talentState.moonSwapped && !immutable) {
+    const diff = dFinal - pFinal;
+    if (diff >= 1 && diff <= 5 && pFinal <= 21 && dFinal <= 21) {
+      const tmp = pFinal; pFinal = dFinal; dFinal = tmp;
+      state.talentState.moonSwapped = true;
+      notes.push(`弧月：内外相易，点数互换（差距 ${diff}）`);
+    }
+  }
+  if (t.has('witchmaid') && !immutable) {
+    const h = handValue(state.player);
+    if (h.soft) { pFinal += 3; notes.push('双生巫女：软牌编织 +3'); }
+  }
+  if (t.has('thunder') && !immutable) {
+    const aceCount = state.player.filter(c => c.rank === 'A').length;
+    if (aceCount > 0) { pFinal += aceCount * 2; notes.push(`轰雷之皮：${aceCount} 张 A，+${aceCount*2}`); }
+  }
+  if (immutable) notes.push('黑骸：点数不可被改变');
+
+  if (state.skillFlags.playerKettle || state.skillFlags.dealerKettle) {
+    const avg = Math.floor((pFinal + dFinal) / 2);
+    pFinal = avg; dFinal = avg;
+    notes.push(`水壶：双方点数取平均，均为 ${avg}`);
+    state.skillFlags.playerKettle = false;
+    state.skillFlags.dealerKettle = false;
+    if (t.has('tide')) unlock('tide_kettle');
+  }
+
+  if (state.skillFlags.stitchActive && pFinal === 21) {
+    unlock('skill_stitching');
+  }
+
+  let forced = null;
+  if (t.has('four')) {
+    const p4 = pFinal > 0 && pFinal % 4 === 0;
+    const d4 = dFinal > 0 && dFinal % 4 === 0;
+    if (p4 && d4) { forced = 'push'; notes.push('4444：双方均为 4 的倍数，平局'); }
+    else if (p4) { forced = 'win'; notes.push('4444：你的点数为 4 的倍数，直接获胜'); }
+    else if (d4) { forced = 'lose'; notes.push('4444：对手点数为 4 的倍数，直接落败'); }
+  }
+
+  const pThreshold = playerBustThreshold();
+  let result;
+  if (forced) result = forced;
+  else if (pFinal > pThreshold) result = 'lose';
+  else if (dFinal > 21) result = 'win';
+  else {
+    const pDist = Math.abs(pFinal - 21);
+    const dDist = Math.abs(dFinal - 21);
+    if (pDist < dDist) result = 'win';
+    else if (pDist > dDist) result = 'lose';
+    else result = 'push';
+  }
+
+  if (result === 'push' && t.has('spider')) { result = 'win'; notes.push('扶摇蜘蛛：平局被编织为胜利'); }
+
+  let colonelPushWin = false;
+  if (result === 'push' && pFinal === 21 && dFinal === 21 && t.has('colonel')) {
+    result = 'win'; colonelPushWin = true;
+    notes.push('上校：刃之征服，21 点平局判胜');
+  }
+
+  if (colonelPushWin) flags.sevenCoilsSlain = true;
+  if (result === 'win' && t.has('brightSun') && state.boss.active) flags.intercalary = true;
+
+  if (state.skillFlags.orchidChanged && dFinal > 21) unlock('skill_orchids');
+  if (state.skillFlags.lensHit && dFinal > 21) unlock('skill_lens');
+  if (state.skillFlags.thunderActive && pFinal === 22 && result === 'win') unlock('skill_thunderstruck');
+  if (state.skillFlags.timeharpUsedThisRound && result === 'win') unlock('skill_timeharp');
+  if (state.skillFlags.sightsKeptCardId !== null && result === 'win' && pFinal === 21) {
+    const lastCard = state.player[state.player.length - 1];
+    if (lastCard && lastCard.id === state.skillFlags.sightsKeptCardId) unlock('skill_sights');
+  }
+
+  if (state.boss.active && state.boss.type === 'ehsan' && result === 'win' && state.boss.ehsanHealed) {
+    unlock('boss_ehsan');
+  }
+
+  const pBJ = isBlackjack(state.player);
+  const jackpot = pBJ && !t.has('wolf') && !t.has('moth');
+
+  let payout = 0;
+  if (result === 'win') {
+    if (jackpot) payout = t.has('brightSun') ? state.bet * 3 : Math.round(state.bet * 2.5);
+    else payout = t.has('brightSun') ? Math.round(state.bet * 1.5) : state.bet * 2;
+  } else if (result === 'push') payout = state.bet;
+  if (result === 'win' && t.has('velvet')) {
+  payout += 10;
+  notes.push('丝绒：守密者的胜利 +10');
+  }
+  if (result === 'win' && t.has('witchsister')) {
+    const extra = Math.round(state.bet * 0.5); payout += extra;
+    notes.push(`双生女巫：额外 +${extra}`);
+  }
+  if (result === 'win' && t.has('cup')) {
+    const extra = Math.min(21, dFinal); payout += extra;
+    notes.push(`赤杯：吞食 +${extra}`);
+  }
+  if (result === 'lose' && t.has('poet')) {
+    const refund = Math.round(state.bet * 0.3); payout += refund;
+    notes.push(`悼歌诗人：哀悼返还 ${refund}`);
+  }
+
+  let bossBonus = 0;
+  if (state.boss.active && result === 'win') {
+    if (state.boss.type === 'azita') bossBonus = 80;
+    else if (state.boss.type === 'ehsan') bossBonus = 90;
+    else bossBonus = 100;
+    payout += bossBonus;
+  }
+  let roseTip = 0;
+  if (state.boss.active && state.boss.type === 'daymare' && result === 'win') {
+    roseTip = 50; payout += roseTip; state.boss.roseTip = roseTip;
+  }
+
+  if (result === 'win' && t.has('sevenCoils')) {
+    save.pendingSevenCoilsBonus = 10;
+    notes.push('七蟠：下一局基础下注 +10');
+  }
+
+  state.chips += payout;
+  state.finalP = pFinal;
+  state.finalD = dFinal;
+
+  const net = payout - state.bet;
+  const resultText = result === 'win' ? (jackpot ? 'Blackjack！' : '你赢了！') : result === 'lose' ? '你输了。' : '平局。';
+  const changed = (pFinal !== pBase || dFinal !== dBase);
+  const scoreLine = changed ? `　你 ${pBase}→${pFinal} · 对手 ${dBase}→${dFinal}` : '';
+
+  let bossLine = '';
+  if (state.boss.active) {
+    const parts = [];
+    if (bossBonus > 0) parts.push(`Boss 奖励 +${bossBonus}`);
+    if (roseTip > 0) parts.push(`玫瑰之约 +${roseTip}`);
+    if (state.boss.type === 'daymare' && state.boss.consulFee > 0) parts.push(`咨询费 -${state.boss.consulFee}`);
+    if (state.boss.type === 'azita' && state.boss.azitaCheckFee > 0) parts.push(`解将费 -${state.boss.azitaCheckFee}`);
+    if (parts.length) bossLine = `　${parts.join(' · ')}`;
+  }
+
+  el.message.className = 'message ' + (net > 0 ? 'win' : net < 0 ? 'lose' : 'push');
+  setMessage(`${resultText}${scoreLine}${bossLine}　` + (net > 0 ? `净赚 +${net}` : net < 0 ? `净亏 ${net}` : '不输不赢'));
+
+  let lineKind;
+  if (pFinal > pThreshold) lineKind = 'bust';
+  else if (jackpot) lineKind = 'jackpot';
+  else if (result === 'win') lineKind = 'win';
+  else if (result === 'lose') lineKind = 'lose';
+  else lineKind = 'push';
+
+  el.notes.innerHTML = notes.map(n => `<div>${n}</div>`).join('') +
+    `<div class="hock-line">${pickLine(lineKind, state.boss.active ? state.boss.type : null)}</div>`;
+
+  if (pBase > pThreshold) {
+    spawnBustExplosion(el.playerCards);
+    shakeScreen();
+  } else if (dBase > 21) {
+    spawnBustExplosion(el.dealerCards);
+  }
+  if (jackpot) spawnFireworks();
+
+  triggerHandHook(state.player, 'onSettle', { state, handValue, isBlackjack, log: setMessage, net });
+  if (jackpot) SFX.jackpot();
+  else if (result === 'win') SFX.win();
+  else if (result === 'lose') SFX.lose();
+  else SFX.push();
+  if (pFinal > pThreshold) SFX.bust();
+  playResultEffect(result);
+
+  if (t.has('dawn') && result === 'win') {
+    state.talentState.dawnBonus = Math.min(0.5, state.talentState.dawnBonus + 0.5);
+  } else if (t.has('dawn')) state.talentState.dawnBonus = 0;
+
+  const s = save.stats;
+  s.rounds++;
+  s.totalProfit = (s.totalProfit || 0) + net;
+  if (result === 'win') {
+    s.wins++; s.winStreak++;
+    if (s.winStreak > s.bestStreak) s.bestStreak = s.winStreak;
+    for (const tid of state.talents) s.talentWins[tid] = (s.talentWins[tid] || 0) + 1;
+  } else if (result === 'lose') { s.losses++; s.winStreak = 0; }
+  else s.pushes++;
+  if (pFinal > pThreshold) s.busts++;
+  if (jackpot) s.blackjacks++;
+  if (state.chips > s.maxChips) s.maxChips = state.chips;
+
+  if (state.boss.active && result === 'win') {
+    s.bossWins[state.boss.type] = (s.bossWins[state.boss.type] || 0) + 1;
+    if (state.boss.type === 'exile') unlock('boss_exile');
+    else if (state.boss.type === 'daymare') unlock('boss_daymare');
+    else if (state.boss.type === 'azita') unlock('boss_azita');
+  }
+  if (!state.boss.active) state.normalRounds++;
+
+  persist();
+  checkAchievements({ result, talents: [...state.talents], flags, jackpot });
+  render();
+  renderTitleStats();
+
+  if (state.chips <= 0) {
+    setTimeout(() => showBankruptModal(), 900);
+  }
+}
+
+function spawnBustExplosion(anchorEl) {
+  let cx = window.innerWidth / 2, cy = window.innerHeight * 0.45;
+  if (anchorEl) {
+    const r = anchorEl.getBoundingClientRect();
+    cx = r.left + r.width / 2;
+    cy = r.top + r.height / 2;
+  }
+  const colors = ['#d1524a','#e8958e','#ff6b5e','#7a2b26','#ffb8a0'];
+  const n = isSmallScreen() ? 55 : 90;
+  for (let i = 0; i < n; i++) {
+    const ang = Math.random() * Math.PI * 2;
+    const spd = 2 + Math.random() * 10;
+    fx.particles.push({
+      x: cx + (Math.random() - 0.5) * 40,
+      y: cy + (Math.random() - 0.5) * 30,
+      vx: Math.cos(ang) * spd,
+      vy: Math.sin(ang) * spd,
+      life: 0, maxLife: 40 + Math.random() * 55,
+      size: 2 + Math.random() * 4,
+      color: colors[(Math.random() * colors.length) | 0],
+      gravity: 0.16, drag: 0.96,
+      twinkle: Math.random() * Math.PI * 2,
+      shape: Math.random() < 0.4 ? 'star' : 'circle',
+    });
+  }
+  startFxLoop();
+}
+
+function spawnFireworks() {
+  const palettes = [
+    ['#c9a227','#e8cf6b','#fffbe6'],
+    ['#5fbf7f','#a3e8bc','#d8ffe8'],
+    ['#c4a6f0','#e0d0ff','#f7f0ff'],
+    ['#e8958e','#ffc3b0','#ffe3d0'],
+    ['#8ac4ff','#c3e2ff','#e8f5ff'],
+  ];
+  const points = [
+    [window.innerWidth * 0.3, window.innerHeight * 0.3],
+    [window.innerWidth * 0.7, window.innerHeight * 0.26],
+    [window.innerWidth * 0.5, window.innerHeight * 0.42],
+    [window.innerWidth * 0.22, window.innerHeight * 0.52],
+    [window.innerWidth * 0.78, window.innerHeight * 0.5],
+  ];
+  points.forEach(([px, py], idx) => {
+    setTimeout(() => {
+      const palette = palettes[idx % palettes.length];
+      for (let i = 0; i < 42; i++) {
+        const ang = (Math.PI * 2 * i / 42) + Math.random() * 0.15;
+        const spd = 2 + Math.random() * 5;
+        fx.particles.push({
+          x: px, y: py,
+          vx: Math.cos(ang) * spd,
+          vy: Math.sin(ang) * spd,
+          life: 0, maxLife: 60 + Math.random() * 45,
+          size: 1.8 + Math.random() * 3,
+          color: palette[(Math.random() * palette.length) | 0],
+          gravity: 0.06, drag: 0.97,
+          twinkle: Math.random() * Math.PI * 2,
+          shape: Math.random() < 0.45 ? 'star' : 'circle',
+        });
+      }
+      startFxLoop();
+    }, idx * 170);
+  });
+}
+
+const bossFlashStyle = document.createElement('style');
+bossFlashStyle.textContent = `
+@keyframes bossIntroFlash {
+  0% { box-shadow: inset 0 0 0 rgba(255,255,255,0), 0 0 0 rgba(255,255,255,0); }
+  15% { box-shadow: inset 0 0 120px rgba(201,162,39,.4), 0 0 80px rgba(201,162,39,.25); }
+  100% { box-shadow: inset 0 0 0 rgba(255,255,255,0), 0 0 0 rgba(255,255,255,0); }
+}
+`;
+document.head.appendChild(bossFlashStyle);
+
+/* ================= 筹码耗尽弹窗 ================= */
+function showBankruptModal() { el.bankruptOverlay.style.display = 'flex'; }
+function closeBankruptModal() { el.bankruptOverlay.style.display = 'none'; }
+
+function forceRestart() {
+  closeBankruptModal();
+  stopBossAmbient();
+  state.chips = START_CHIPS; state.bet = 0;
+  state.deck = shuffle(newDeck());
+  state.player = []; state.dealer = [];
+  state.hideHole = true; state.talents = new Set();
+  state.finalP = null; state.finalD = null;
+  state.roundFlags = {};
+  state.normalRounds = 0; state.bossIndex = 0;
+  state.boss = { active:false, type:null, playerBonus:0, dealerBonus:0, triggerCount:0, consulFee:0, roseTip:0, holeRevealed:false, azitaCheckUsed:false, azitaCheckFee:0, ehsanHealed:false, ehsanHealOffset:0, ehsanPrescriptionGiven:false, ehsanPrescriptions:0 };
+  state.talentState.dawnBonus = 0;
+  resetTalentRoundState();
+
+  fx.particles = []; fx.banner.className = 'fx-banner';
+  document.body.classList.remove('shake');
+  el.notes.innerHTML = '';
+  el.message.className = 'message';
+
+  renderTalents();
+  openTalentSelection();
+  render();
+}
+
+/* ================= 重置 ================= */
+function resetRoundForBetting() {
+  state.player = []; state.dealer = [];
+  state.bet = 0; state.hideHole = true;
+  state.finalP = null; state.finalD = null;
+  state.roundFlags = {};
+  state.boss.consulFee = 0; state.boss.roseTip = 0; state.boss.holeRevealed = false;
+  state.boss.azitaCheckUsed = false;
+  state.boss.ehsanHealed = false;
+  state.boss.ehsanHealOffset = 0;
+  state.boss.ehsanPrescriptionGiven = false;
+  state.phase = 'betting';
+  resetTalentRoundState();
+
+  fx.particles = []; fx.banner.className = 'fx-banner';
+  document.body.classList.remove('shake');
+  el.notes.innerHTML = '';
+  el.message.className = 'message';
+
+  if (state.boss.active) {
+    const msgs = {
+      exile: '流亡者靠在椅背上。“下注吧。”',
+      daymare: '日魇把玩着戒指。“下注吧，亲爱的。”',
+      azita: '阿齐塔推过一枚兵棋。“下注吧。”',
+      ehsan: '埃桑翻开处方本。“下注吧。别担心，会没事的。”',
+    };
+    setMessage(msgs[state.boss.type] || '霍科博尔德推来一枚古金币。“下注吧。”');
+  } else setMessage('霍科博尔德推来一枚古金币。“下注吧。”');
+  render();
+}
+
+function nextRound() {
+  if (state.busy || state.phase !== 'settled') return;
+  if (state.chips <= 0) { showBankruptModal(); return; }
+  if (state.boss.active) {
+    state.boss.active = false; state.boss.type = null;
+    state.boss.playerBonus = 0; state.boss.dealerBonus = 0;
+    state.boss.triggerCount = 0; state.boss.consulFee = 0;
+    state.boss.roseTip = 0; state.boss.holeRevealed = false;
+    state.boss.azitaCheckUsed = false; state.boss.azitaCheckFee = 0;
+    state.boss.ehsanHealed = false; state.boss.ehsanHealOffset = 0;
+    state.boss.ehsanPrescriptionGiven = false; state.boss.ehsanPrescriptions = 0;
+    state.bossIndex = (state.bossIndex + 1) % 4;
+    state.normalRounds = 0;
+    stopBossAmbient();
+    resetRoundForBetting();
+    return;
+  }
+  if (state.normalRounds >= 3) { openBossChoice(); return; }
+  resetRoundForBetting();
+}
+
+function restartGame() {
+  if (state.busy) return;
+  const ok = confirm('确定要重新开始吗？\\n当前筹码、天赋与 Boss 进度将重置，统计数据保留。');
+  if (!ok) return;
+  stopBossAmbient();
+  state.chips = START_CHIPS; state.bet = 0;
+  state.deck = shuffle(newDeck());
+  state.player = []; state.dealer = [];
+  state.hideHole = true; state.talents = new Set();
+  state.finalP = null; state.finalD = null;
+  state.roundFlags = {};
+  state.normalRounds = 0; state.bossIndex = 0;
+  state.boss = { active:false, type:null, playerBonus:0, dealerBonus:0, triggerCount:0, consulFee:0, roseTip:0, holeRevealed:false, azitaCheckUsed:false, azitaCheckFee:0, ehsanHealed:false, ehsanHealOffset:0, ehsanPrescriptionGiven:false, ehsanPrescriptions:0 };
+  state.talentState.dawnBonus = 0;
+  resetTalentRoundState();
+
+  fx.particles = []; fx.banner.className = 'fx-banner';
+  document.body.classList.remove('shake');
+  el.notes.innerHTML = '';
+  el.message.className = 'message';
+
+  renderTalents();
+  openTalentSelection();
+  render();
+}
+
+/* ================= 输入绑定 ================= */
+['btnStart','btnOpenAchTitle','btnOpenAchGame','btnStatsTitle','btnRestart','btnStoryTitle','btnRules','btnStoryNext','btnSkipStory','btnCloseAch','btnCloseRules','btnCloseStats','btnCloseSpecial','btnStartBoss','btnSkipBoss','btnMenu','btnBankruptRestart','btnHit','btnStand','btnDouble','btnNext','btnSkillSkip'].forEach(id => {
+  const btn = document.getElementById(id);
+  if (btn) btn.addEventListener('click', () => SFX.click());
+});
+
+el.btnStart.addEventListener('click', onStartClick);
+document.getElementById('btnOpenAchTitle').addEventListener('click', openAchievements);
+document.getElementById('btnOpenAchGame').addEventListener('click', openAchievements);
+document.getElementById('btnStatsTitle').addEventListener('click', openStats);
+document.getElementById('btnRestart').addEventListener('click', restartGame);
+document.getElementById('btnStoryTitle').addEventListener('click', () => openStory(true));
+document.getElementById('btnRules').addEventListener('click', () => { el.rulesOverlay.style.display = 'flex'; });
+el.btnStoryNext.addEventListener('click', advanceStory);
+el.btnSkipStory.addEventListener('click', () => closeStory(true));
+document.getElementById('btnCloseAch').addEventListener('click', () => { el.achievementOverlay.style.display = 'none'; });
+document.getElementById('btnCloseRules').addEventListener('click', () => { el.rulesOverlay.style.display = 'none'; });
+document.getElementById('btnCloseStats').addEventListener('click', () => { el.statsOverlay.style.display = 'none'; });
+document.getElementById('btnCloseSpecial').addEventListener('click', closeSpecialModal);
+el.btnStartBoss.addEventListener('click', startBossFight);
+el.btnSkipBoss.addEventListener('click', skipBoss);
+document.getElementById('btnMenu').addEventListener('click', () => { if (state.busy) return; showScreen('title'); });
+document.getElementById('btnBankruptRestart').addEventListener('click', forceRestart);
+
+el.betPanel.addEventListener('click', e => {
+  const btn = e.target.closest('button[data-bet]');
+  if (!btn || btn.disabled) return;
+  const amount = btn.dataset.bet === 'all' ? state.chips : parseInt(btn.dataset.bet, 10);
+  startRound(amount);
+});
+el.btnHit.addEventListener('click', playerHit);
+el.btnStand.addEventListener('click', playerStand);
+el.btnDouble.addEventListener('click', playerDouble);
+el.btnNext.addEventListener('click', nextRound);
+
+document.addEventListener('keydown', e => {
+  if (el.bankruptOverlay.style.display === 'flex') {
+    if (e.key === 'Enter') forceRestart();
+    return;
+  }
+  if (document.getElementById('specialModal').classList.contains('show')) {
+    if (e.key === 'Enter' || e.key === 'Escape') closeSpecialModal();
+    return;
+  }
+  if (el.storyOverlay.style.display === 'flex') {
+    if (e.key === 'Escape') closeStory(true);
+    else if (e.key === ' ' || e.key === 'Enter') advanceStory();
+    return;
+  }
+  if (el.skillOverlay.style.display === 'flex') return;
+  const anyOverlay =
+    el.achievementOverlay.style.display === 'flex' ||
+    el.rulesOverlay.style.display === 'flex' ||
+    el.statsOverlay.style.display === 'flex' ||
+    el.bossChoiceOverlay.style.display === 'flex';
+  if (anyOverlay) {
+    if (e.key === 'Escape') {
+      el.achievementOverlay.style.display = 'none';
+      el.rulesOverlay.style.display = 'none';
+      el.statsOverlay.style.display = 'none';
+    }
+    return;
+  }
+  if (state.phase === 'talent' || state.phase === 'title') return;
+  if (el.gameScreen.style.display === 'none') return;
+  const k = e.key.toLowerCase();
+  if (k === 'h') playerHit();
+  else if (k === 's') playerStand();
+  else if (k === 'd') playerDouble();
+  else if (k === 'n') nextRound();
+});
+
+/* ================= 启动 ================= */
+initFx();
+loadSave();
+renderTalentGrid();
+renderAchievements();
+renderTitleStats();
+render();
+showScreen('title');
+</script>
+</body>
+</html>
